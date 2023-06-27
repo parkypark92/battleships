@@ -1,17 +1,25 @@
 import { initializeGameboard } from "../src/gameboard.js";
+import { Ship } from "../src/ships.js";
+
+const testArea = initializeGameboard();
+testArea.board[0].isOccupied = Ship(5);
 
 test("check board size", () => {
-  expect(initializeGameboard().length).toBe(100);
+  expect(testArea.board.length).toBe(100);
 });
 
 test("check board square", () => {
-  expect(initializeGameboard()[0]).toBe("0, 0");
+  expect(testArea.board[0].coords).toBe("0, 0");
 });
 
 test("check board square", () => {
-  expect(initializeGameboard()[99]).toBe("9, 9");
+  expect(testArea.board[99].coords).toBe("9, 9");
 });
 
 test("check board square", () => {
-  expect(initializeGameboard()[50]).toBe("5, 0");
+  expect(testArea.board[50].coords).toBe("5, 0");
+});
+
+test("check if gameboard empty", () => {
+  expect(testArea.hasShips()).toBe(true);
 });
