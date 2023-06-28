@@ -6,9 +6,12 @@ export function initializeGameboard() {
     }
   }
   return {
-    board: boardSquares,
+    squares: boardSquares,
     hasShips: function () {
-      return this.board.some((square) => square.isOccupied !== false);
+      return this.squares.some((square) => square.isOccupied !== false);
+    },
+    getSquare: function (coordinates) {
+      return this.squares.find((square) => square.coords === coordinates);
     },
   };
 }
