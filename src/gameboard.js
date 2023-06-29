@@ -13,6 +13,10 @@ export function initializeGameboard() {
     getSquare: function (coordinates) {
       return this.squares.find((square) => square.coords === coordinates);
     },
+    addShip: function (ship, coordinates) {
+      const currentSquare = this.getSquare(coordinates);
+      currentSquare.isOccupied = ship;
+    },
   };
 }
 
