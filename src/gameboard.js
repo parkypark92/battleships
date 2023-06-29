@@ -7,9 +7,6 @@ export function initializeGameboard() {
   }
   return {
     squares: boardSquares,
-    hasShips: function () {
-      return this.squares.some((square) => square.isOccupied !== false);
-    },
     getSquare: function (coordinates) {
       return this.squares.find((square) => square.coords === coordinates);
     },
@@ -17,12 +14,25 @@ export function initializeGameboard() {
       const currentSquare = this.getSquare(coordinates);
       currentSquare.isOccupied = ship;
     },
+    recieveAttack: function (coordinates) {
+      const currentSquare = this.getSquare(coordinates);
+      if (currentSquare.attacked === true) return;
+      if (currentSquare.isOccupied !== false) {
+        let ship = currentSquare.isOccupied;
+        ship.hit();
+      }
+      currentSquare.attacked = true;
+    },
+    hasShips: function () {
+      return this.squares.some((square) => square.isOccupied !== false);
+    },
   };
 }
 
 function createSquare(x, y) {
   return {
     coords: `${x}, ${y}`,
+    row: `${y}`,
     isOccupied: false,
     attacked: false,
   };
