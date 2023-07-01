@@ -12,7 +12,27 @@ export function initializeGameboard() {
     },
     addShip: function (ship, coordinates) {
       const currentSquare = this.getSquare(coordinates);
-      currentSquare.isOccupied = ship;
+      if (checkShipPlacement(ship, currentSquare)) {
+        this.occupySquares(ship, currentSquare);
+      }
+    },
+    occupySquares: function (ship, frontSquare) {
+      const squaresToOccupy = [frontSquare];
+      let xCoord = frontSquare.col;
+      let yCoord = frontSquare.row;
+      for (let i = 1; i < ship.length; i++) {
+        if (ship.direction === "vertical") {
+          yCoord++;
+        } else if (ship.direction === "horizontal") {
+          xCoord++;
+        }
+        let currentSquare = this.getSquare(`${xCoord}, ${yCoord}`);
+        squaresToOccupy.push(currentSquare);
+      }
+      console.log(squaresToOccupy);
+      for (let square of squaresToOccupy) {
+        square.isOccupied = ship;
+      }
     },
     recieveAttack: function (coordinates) {
       const currentSquare = this.getSquare(coordinates);
@@ -32,8 +52,17 @@ export function initializeGameboard() {
 function createSquare(x, y) {
   return {
     coords: `${x}, ${y}`,
-    row: `${y}`,
+    row: y,
+    col: x,
     isOccupied: false,
     attacked: false,
   };
+}
+
+function checkShipPlacement(ship, square) {
+  if (ship.direction === "vertical") {
+    return ship.length + square.row <= 10 ? true : false;
+  } else if (ship.direction === "horizontal") {
+    return ship.length + square.col <= 10 ? true : false;
+  }
 }

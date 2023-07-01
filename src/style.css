@@ -4,9 +4,21 @@
     box-sizing: border-box;
 }
 
+html, body {
+    height: 100%;
+}
+
+.main-wrapper {
+    min-height: 875px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
 .boards {
     display: flex;
-    gap: 50px;
+    justify-content: center;
+    gap: 200px;
 }
 
 .gameboard {
@@ -14,7 +26,7 @@
 }
 
 td {
-    height: 30px;
-    width: 30px;
+    height: 50px;
+    width: 50px;
     border: 1px solid black;
 }

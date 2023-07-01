@@ -13,3 +13,8 @@ export const computerBattleship = Ship(4);
 export const computerDestroyer = Ship(3);
 export const computerSubmarine = Ship(3);
 export const computerPatrolBoat = Ship(2);
+
+export function placeShips() {
+  playerBattleship.direction = "horizontal";
+  playerBoard.addShip(playerBattleship, "6, 6");
+}

@@ -2,6 +2,7 @@ export function Ship(length) {
   return {
     length,
     hits: 0,
+    direction: "vertical",
     hit: function () {
       this.hits++;
     },
