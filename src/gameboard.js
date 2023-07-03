@@ -16,7 +16,7 @@ export function initializeGameboard() {
         this.occupySquares(ship, currentSquare);
       }
     },
-    occupySquares: function (ship, frontSquare) {
+    occupySquares: function (ship, frontSquare, occupy = true) {
       const squaresToOccupy = [frontSquare];
       let xCoord = frontSquare.col;
       let yCoord = frontSquare.row;
@@ -29,9 +29,12 @@ export function initializeGameboard() {
         let currentSquare = this.getSquare(`${xCoord}, ${yCoord}`);
         squaresToOccupy.push(currentSquare);
       }
-      console.log(squaresToOccupy);
       for (let square of squaresToOccupy) {
-        square.isOccupied = ship;
+        if ((occupy = false)) {
+          square.isOccupied = false;
+        } else {
+          square.isOccupied = ship;
+        }
       }
     },
     recieveAttack: function (coordinates) {
