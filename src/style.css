@@ -52,3 +52,11 @@ td {
     width: 50px;
     border: 1px solid black;
 }
+
+.occupied {
+    background-color: rgb(70, 70, 221);
+}
+
+.illegal-placement {
+    background-color: rgb(247, 78, 78);
+}

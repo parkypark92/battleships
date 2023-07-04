@@ -14,7 +14,7 @@ const placeShips = [
   placeSubmarine,
   placePatrolBoat,
 ];
-let selectedShip = "";
+let selectedShip = "carrier";
 
 placeCarrier.classList.add("ship-selected");
 placeCarrier.addEventListener("click", selectShip);
@@ -28,12 +28,9 @@ function selectShip() {
     ship.classList.remove("ship-selected");
   }
   this.classList.add("ship-selected");
-  selectShip = this.getAttribute("data-ship");
+  selectedShip = this.getAttribute("data-ship");
+  console.log(typeof selectedShip);
 }
-
-// for (let square of player.board.squares) {
-//   square.addEventListener("mouseover", player.board.addShip());
-// }
 
 function displayBoard(board, boardTable) {
   for (let square of board.squares) {
@@ -44,5 +41,55 @@ function displayBoard(board, boardTable) {
   }
 }
 
+function addPlayerBoardEvents() {
+  for (let square of player.board.squares) {
+    let currentSquare = document.querySelector(
+      `[data-coord="${square.coords}"]`
+    );
+    currentSquare.addEventListener("mouseover", () =>
+      createHoverEvent(displayOccupiedSquares, square, currentSquare, true)
+    );
+    currentSquare.addEventListener("mouseout", () =>
+      createHoverEvent(unOccupySquares, square, currentSquare, false)
+    );
+  }
+}
+
+function createHoverEvent(callback, square, currentSquare, trueOrFalse) {
+  let squaresToOccupy = player.board.addShip(
+    player[selectedShip],
+    square.coords,
+    trueOrFalse
+  );
+  if (squaresToOccupy === "illegal placement") {
+    displayIllegalPlacement(currentSquare);
+  } else {
+    callback(squaresToOccupy);
+  }
+}
+
+function displayOccupiedSquares(squares) {
+  for (let square of squares) {
+    let currentSquare = document.querySelector(
+      `[data-coord="${square.coords}"]`
+    );
+    currentSquare.classList.add("occupied");
+  }
+}
+
+function unOccupySquares(squares) {
+  for (let square of squares) {
+    let currentSquare = document.querySelector(
+      `[data-coord="${square.coords}"]`
+    );
+    currentSquare.classList.remove("occupied");
+  }
+}
+
+function displayIllegalPlacement(square) {
+  square.classList.toggle("illegal-placement");
+}
+
 displayBoard(player.board, playerBoardDisplay);
+addPlayerBoardEvents();
 displayBoard(computer.board, computerBoardDisplay);

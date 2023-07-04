@@ -10,13 +10,15 @@ export function initializeGameboard() {
     getSquare: function (coordinates) {
       return this.squares.find((square) => square.coords === coordinates);
     },
-    addShip: function (ship, coordinates) {
+    addShip: function (ship, coordinates, trueOrFalse) {
       const currentSquare = this.getSquare(coordinates);
       if (checkShipPlacement(ship, currentSquare)) {
-        this.occupySquares(ship, currentSquare);
+        return this.occupySquares(ship, currentSquare, trueOrFalse);
+      } else {
+        return "illegal placement";
       }
     },
-    occupySquares: function (ship, frontSquare, occupy = true) {
+    occupySquares: function (ship, frontSquare, trueOrFalse) {
       const squaresToOccupy = [frontSquare];
       let xCoord = frontSquare.col;
       let yCoord = frontSquare.row;
@@ -30,12 +32,13 @@ export function initializeGameboard() {
         squaresToOccupy.push(currentSquare);
       }
       for (let square of squaresToOccupy) {
-        if ((occupy = false)) {
+        if (trueOrFalse === false) {
           square.isOccupied = false;
-        } else {
+        } else if (trueOrFalse === true) {
           square.isOccupied = ship;
         }
       }
+      return squaresToOccupy;
     },
     recieveAttack: function (coordinates) {
       const currentSquare = this.getSquare(coordinates);
