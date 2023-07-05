@@ -8,7 +8,7 @@ const testSquare2 = testBoard.getSquare("0, 1");
 const testSquare3 = testBoard.getSquare("0, 2");
 const testSquare4 = testBoard.getSquare("0, 3");
 const testSquare5 = testBoard.getSquare("0, 4");
-testBoard.addShip(testShip, "0, 0");
+testBoard.addShip(testShip, testSquare1);
 testBoard.recieveAttack("0, 0");
 testBoard.recieveAttack("0, 0");
 

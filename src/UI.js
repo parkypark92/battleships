@@ -15,6 +15,7 @@ const placeShips = [
   placePatrolBoat,
 ];
 let selectedShip = "carrier";
+let currentShip = document.querySelector(`[data-ship="${selectedShip}"]`);
 
 placeCarrier.classList.add("ship-selected");
 placeCarrier.addEventListener("click", selectShip);
@@ -29,7 +30,7 @@ function selectShip() {
   }
   this.classList.add("ship-selected");
   selectedShip = this.getAttribute("data-ship");
-  console.log(typeof selectedShip);
+  currentShip = document.querySelector(`[data-ship="${selectedShip}"]`);
 }
 
 function displayBoard(board, boardTable) {
@@ -46,22 +47,29 @@ function addPlayerBoardEvents() {
     let currentSquare = document.querySelector(
       `[data-coord="${square.coords}"]`
     );
-    currentSquare.addEventListener("mouseover", () =>
-      createHoverEvent(displayOccupiedSquares, square, currentSquare, true)
-    );
-    currentSquare.addEventListener("mouseout", () =>
-      createHoverEvent(unOccupySquares, square, currentSquare, false)
-    );
+    currentSquare.addEventListener("mouseover", () => {
+      if (currentShip.classList.contains("placed")) return;
+      createHoverEvent(displayOccupiedSquares, square, currentSquare);
+    });
+    currentSquare.addEventListener("mouseout", () => {
+      if (currentShip.classList.contains("placed")) return;
+      createHoverEvent(unOccupySquares, square, currentSquare);
+    });
+    currentSquare.addEventListener("click", () => {
+      if (currentShip.classList.contains("placed")) return;
+      if (currentSquare.classList.contains("illegal-placement")) return;
+      player.board.addShip(player[selectedShip], square);
+      currentShip.classList.add("placed");
+    });
   }
 }
 
-function createHoverEvent(callback, square, currentSquare, trueOrFalse) {
-  let squaresToOccupy = player.board.addShip(
+function createHoverEvent(callback, square, currentSquare) {
+  let squaresToOccupy = player.board.checkShipPlacement(
     player[selectedShip],
-    square.coords,
-    trueOrFalse
+    square
   );
-  if (squaresToOccupy === "illegal placement") {
+  if (squaresToOccupy === false) {
     displayIllegalPlacement(currentSquare);
   } else {
     callback(squaresToOccupy);
@@ -73,7 +81,7 @@ function displayOccupiedSquares(squares) {
     let currentSquare = document.querySelector(
       `[data-coord="${square.coords}"]`
     );
-    currentSquare.classList.add("occupied");
+    currentSquare.classList.add("placement-preview");
   }
 }
 
@@ -82,7 +90,7 @@ function unOccupySquares(squares) {
     let currentSquare = document.querySelector(
       `[data-coord="${square.coords}"]`
     );
-    currentSquare.classList.remove("occupied");
+    currentSquare.classList.remove("placement-preview");
   }
 }
 

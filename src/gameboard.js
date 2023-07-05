@@ -10,15 +10,25 @@ export function initializeGameboard() {
     getSquare: function (coordinates) {
       return this.squares.find((square) => square.coords === coordinates);
     },
-    addShip: function (ship, coordinates, trueOrFalse) {
-      const currentSquare = this.getSquare(coordinates);
-      if (checkShipPlacement(ship, currentSquare)) {
-        return this.occupySquares(ship, currentSquare, trueOrFalse);
-      } else {
-        return "illegal placement";
+    addShip: function (ship, square) {
+      let squaresToOccupy = this.checkShipPlacement(ship, square);
+      if (squaresToOccupy === false) {
+        return;
+      }
+      this.occupySquares(ship, squaresToOccupy);
+    },
+    checkShipPlacement: function (ship, square) {
+      if (ship.direction === "vertical") {
+        return ship.length + square.row <= 10
+          ? this.getSquaresToOccupy(ship, square)
+          : false;
+      } else if (ship.direction === "horizontal") {
+        return ship.length + square.col <= 10
+          ? this.getSquaresToOccupy(ship, square)
+          : false;
       }
     },
-    occupySquares: function (ship, frontSquare, trueOrFalse) {
+    getSquaresToOccupy: function (ship, frontSquare) {
       const squaresToOccupy = [frontSquare];
       let xCoord = frontSquare.col;
       let yCoord = frontSquare.row;
@@ -31,14 +41,12 @@ export function initializeGameboard() {
         let currentSquare = this.getSquare(`${xCoord}, ${yCoord}`);
         squaresToOccupy.push(currentSquare);
       }
-      for (let square of squaresToOccupy) {
-        if (trueOrFalse === false) {
-          square.isOccupied = false;
-        } else if (trueOrFalse === true) {
-          square.isOccupied = ship;
-        }
-      }
       return squaresToOccupy;
+    },
+    occupySquares: function (ship, squaresToOccupy) {
+      for (let square of squaresToOccupy) {
+        square.isOccupied = ship;
+      }
     },
     recieveAttack: function (coordinates) {
       const currentSquare = this.getSquare(coordinates);
@@ -63,12 +71,4 @@ function createSquare(x, y) {
     isOccupied: false,
     attacked: false,
   };
-}
-
-function checkShipPlacement(ship, square) {
-  if (ship.direction === "vertical") {
-    return ship.length + square.row <= 10 ? true : false;
-  } else if (ship.direction === "horizontal") {
-    return ship.length + square.col <= 10 ? true : false;
-  }
 }
