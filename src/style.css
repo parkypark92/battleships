@@ -60,3 +60,7 @@ td {
 .illegal-placement {
     background-color: rgb(247, 78, 78);
 }
+
+.placed-ship {
+    background-color: rgb(41, 41, 209);
+}

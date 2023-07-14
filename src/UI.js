@@ -14,6 +14,7 @@ const placeShips = [
   placeSubmarine,
   placePatrolBoat,
 ];
+const directionButton = document.querySelector(".ship-direction");
 let selectedShip = "carrier";
 let currentShip = document.querySelector(`[data-ship="${selectedShip}"]`);
 
@@ -23,6 +24,16 @@ placeBattleship.addEventListener("click", selectShip);
 placeDestroyer.addEventListener("click", selectShip);
 placeSubmarine.addEventListener("click", selectShip);
 placePatrolBoat.addEventListener("click", selectShip);
+directionButton.addEventListener("click", () => {
+  for (let ship of player.ships) {
+    ship.changeDirection();
+  }
+  if (directionButton.textContent === "Vertical") {
+    directionButton.textContent = "Horizontal";
+  } else {
+    directionButton.textContent = "Vertical";
+  }
+});
 
 function selectShip() {
   for (let ship of placeShips) {
@@ -49,22 +60,25 @@ function addPlayerBoardEvents() {
     );
     currentSquare.addEventListener("mouseover", () => {
       if (currentShip.classList.contains("placed")) return;
-      createHoverEvent(displayOccupiedSquares, square, currentSquare);
+      if (currentSquare.classList.contains("placed-ship")) return;
+      createEvent(displayOccupiedSquares, square, currentSquare);
     });
     currentSquare.addEventListener("mouseout", () => {
       if (currentShip.classList.contains("placed")) return;
-      createHoverEvent(unOccupySquares, square, currentSquare);
+      createEvent(unOccupySquares, square, currentSquare);
     });
     currentSquare.addEventListener("click", () => {
       if (currentShip.classList.contains("placed")) return;
       if (currentSquare.classList.contains("illegal-placement")) return;
+      if (currentSquare.classList.contains("placed-ship")) return;
       player.board.addShip(player[selectedShip], square);
+      createEvent(displayPlacedShip, square, currentSquare);
       currentShip.classList.add("placed");
     });
   }
 }
 
-function createHoverEvent(callback, square, currentSquare) {
+function createEvent(callback, square, currentSquare) {
   let squaresToOccupy = player.board.checkShipPlacement(
     player[selectedShip],
     square
@@ -96,6 +110,15 @@ function unOccupySquares(squares) {
 
 function displayIllegalPlacement(square) {
   square.classList.toggle("illegal-placement");
+}
+
+function displayPlacedShip(squares) {
+  for (let square of squares) {
+    let currentSquare = document.querySelector(
+      `[data-coord="${square.coords}"]`
+    );
+    currentSquare.classList.add("placed-ship");
+  }
 }
 
 displayBoard(player.board, playerBoardDisplay);

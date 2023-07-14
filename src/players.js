@@ -8,5 +8,14 @@ export function Player() {
   const destroyer = Ship(3);
   const submarine = Ship(3);
   const patrolBoat = Ship(2);
-  return { board, carrier, battleship, destroyer, submarine, patrolBoat };
+  const ships = [carrier, battleship, destroyer, submarine, patrolBoat];
+  return {
+    board,
+    carrier,
+    battleship,
+    destroyer,
+    submarine,
+    patrolBoat,
+    ships,
+  };
 }
