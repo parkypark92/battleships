@@ -60,7 +60,6 @@ function addPlayerBoardEvents() {
     );
     currentSquare.addEventListener("mouseover", () => {
       if (currentShip.classList.contains("placed")) return;
-      if (currentSquare.classList.contains("placed-ship")) return;
       createEvent(displayOccupiedSquares, square, currentSquare);
     });
     currentSquare.addEventListener("mouseout", () => {
@@ -95,6 +94,10 @@ function displayOccupiedSquares(squares) {
     let currentSquare = document.querySelector(
       `[data-coord="${square.coords}"]`
     );
+    if (checkShipOverlap(squares)) {
+      displayIllegalPlacement(currentSquare);
+      return;
+    }
     currentSquare.classList.add("placement-preview");
   }
 }
@@ -104,6 +107,10 @@ function unOccupySquares(squares) {
     let currentSquare = document.querySelector(
       `[data-coord="${square.coords}"]`
     );
+    if (checkShipOverlap(squares)) {
+      displayIllegalPlacement(currentSquare);
+      return;
+    }
     currentSquare.classList.remove("placement-preview");
   }
 }
@@ -119,6 +126,19 @@ function displayPlacedShip(squares) {
     );
     currentSquare.classList.add("placed-ship");
   }
+}
+
+function checkShipOverlap(squares) {
+  const checkSquares = [];
+  for (let square of squares) {
+    let currentSquare = document.querySelector(
+      `[data-coord="${square.coords}"]`
+    );
+    checkSquares.push(currentSquare);
+  }
+  return checkSquares.some((square) =>
+    square.classList.contains("placed-ship")
+  );
 }
 
 displayBoard(player.board, playerBoardDisplay);
