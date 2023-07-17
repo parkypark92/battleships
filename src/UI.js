@@ -126,6 +126,20 @@ function displayPlacedShip(squares) {
     );
     currentSquare.classList.add("placed-ship");
   }
+  setAdjacentSquares(squares);
+}
+
+function setAdjacentSquares(squaresToOccupy) {
+  const adjacentSquares = player.board.getAdjacentSquares(
+    player[selectedShip],
+    squaresToOccupy
+  );
+  for (let square of adjacentSquares) {
+    let currentSquare = document.querySelector(
+      `[data-coord="${square.coords}"]`
+    );
+    currentSquare.classList.add("adjacent-square");
+  }
 }
 
 function checkShipOverlap(squares) {
@@ -136,8 +150,10 @@ function checkShipOverlap(squares) {
     );
     checkSquares.push(currentSquare);
   }
-  return checkSquares.some((square) =>
-    square.classList.contains("placed-ship")
+  return checkSquares.some(
+    (square) =>
+      square.classList.contains("placed-ship") ||
+      square.classList.contains("adjacent-square")
   );
 }
 

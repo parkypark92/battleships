@@ -43,6 +43,37 @@ export function initializeGameboard() {
       }
       return squaresToOccupy;
     },
+    getAdjacentSquares: function (ship, squaresToOccupy) {
+      const finalAdjacentSquares = [];
+      for (let square of squaresToOccupy) {
+        const allAdjacentSquares = this.calculateAdjacentSquares(square);
+        for (let square of allAdjacentSquares) {
+          if (
+            square !== undefined &&
+            square.isOccupied === false &&
+            square.isAdjacentTo === false
+          ) {
+            square.isAdjacentTo = ship;
+            finalAdjacentSquares.push(square);
+          }
+        }
+      }
+      return finalAdjacentSquares;
+    },
+    calculateAdjacentSquares: function (square) {
+      const adjacentSquares = [];
+      let xCoord = square.col;
+      let yCoord = square.row;
+      adjacentSquares.push(this.getSquare(`${xCoord}, ${yCoord - 1}`));
+      adjacentSquares.push(this.getSquare(`${xCoord + 1}, ${yCoord - 1}`));
+      adjacentSquares.push(this.getSquare(`${xCoord + 1}, ${yCoord}`));
+      adjacentSquares.push(this.getSquare(`${xCoord + 1}, ${yCoord + 1}`));
+      adjacentSquares.push(this.getSquare(`${xCoord}, ${yCoord + 1}`));
+      adjacentSquares.push(this.getSquare(`${xCoord - 1}, ${yCoord + 1}`));
+      adjacentSquares.push(this.getSquare(`${xCoord - 1}, ${yCoord}`));
+      adjacentSquares.push(this.getSquare(`${xCoord - 1}, ${yCoord - 1}`));
+      return adjacentSquares;
+    },
     occupySquares: function (ship, squaresToOccupy) {
       for (let square of squaresToOccupy) {
         square.isOccupied = ship;
@@ -69,6 +100,7 @@ function createSquare(x, y) {
     row: y,
     col: x,
     isOccupied: false,
+    isAdjacentTo: false,
     attacked: false,
   };
 }

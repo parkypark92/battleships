@@ -57,6 +57,10 @@ td {
     background-color: rgb(120, 120, 245);
 }
 
+.adjacent-square {
+    background-color: #e7e7e7;
+}
+
 .illegal-placement {
     background-color: rgb(247, 78, 78);
 }
