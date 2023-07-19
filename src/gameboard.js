@@ -13,9 +13,10 @@ export function initializeGameboard() {
     addShip: function (ship, square) {
       let squaresToOccupy = this.checkShipPlacement(ship, square);
       if (squaresToOccupy === false) {
-        return;
+        return false;
       }
       this.occupySquares(ship, squaresToOccupy);
+      return squaresToOccupy;
     },
     checkShipPlacement: function (ship, square) {
       if (ship.direction === "vertical") {
@@ -58,7 +59,6 @@ export function initializeGameboard() {
           }
         }
       }
-      console.log(finalAdjacentSquares);
       return finalAdjacentSquares;
     },
     calculateAdjacentSquares: function (square) {
@@ -78,6 +78,7 @@ export function initializeGameboard() {
     occupySquares: function (ship, squaresToOccupy) {
       for (let square of squaresToOccupy) {
         square.isOccupied = ship;
+        console.log(square);
       }
     },
     recieveAttack: function (coordinates) {

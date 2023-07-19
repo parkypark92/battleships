@@ -1,8 +1,10 @@
 import { player, computer } from "./game.js";
+import { startGame } from "./game.js";
 
-const startGame = document.querySelector(".start-game");
+const startButton = document.querySelector(".start-game");
+startButton.addEventListener("click", startGame);
 const playerBoardDisplay = document.getElementById("gameboard-one");
-const computerBoardDisplay = document.getElementById("gameboard-two");
+export const computerBoardDisplay = document.getElementById("gameboard-two");
 const placeCarrier = document.getElementById("place-carrier");
 const placeBattleship = document.getElementById("place-battleship");
 const placeDestroyer = document.getElementById("place-destroyer");
@@ -56,7 +58,7 @@ function displayBoard(board, boardTable) {
 
 function addPlayerBoardEvents() {
   for (let square of player.board.squares) {
-    let currentSquare = document.querySelector(
+    let currentSquare = playerBoardDisplay.querySelector(
       `[data-coord="${square.coords}"]`
     );
     currentSquare.addEventListener("mouseover", () => {
@@ -87,16 +89,14 @@ function createEvent(callback, square, currentSquare) {
   if (squaresToOccupy === false) {
     displayIllegalPlacement(currentSquare);
   } else {
-    callback(squaresToOccupy);
+    callback(squaresToOccupy, playerBoardDisplay, player, player[selectedShip]);
   }
 }
 
-function displayOccupiedSquares(squares) {
+function displayOccupiedSquares(squares, board) {
   for (let square of squares) {
-    let currentSquare = document.querySelector(
-      `[data-coord="${square.coords}"]`
-    );
-    if (checkShipOverlap(squares)) {
+    let currentSquare = board.querySelector(`[data-coord="${square.coords}"]`);
+    if (checkShipOverlap(squares, board)) {
       displayIllegalPlacement(currentSquare);
       return;
     }
@@ -104,12 +104,10 @@ function displayOccupiedSquares(squares) {
   }
 }
 
-function unOccupySquares(squares) {
+function unOccupySquares(squares, board) {
   for (let square of squares) {
-    let currentSquare = document.querySelector(
-      `[data-coord="${square.coords}"]`
-    );
-    if (checkShipOverlap(squares)) {
+    let currentSquare = board.querySelector(`[data-coord="${square.coords}"]`);
+    if (checkShipOverlap(squares, board)) {
       displayIllegalPlacement(currentSquare);
       return;
     }
@@ -121,35 +119,30 @@ function displayIllegalPlacement(square) {
   square.classList.toggle("illegal-placement");
 }
 
-function displayPlacedShip(squares) {
+export function displayPlacedShip(squares, board, currentPlayer, ship) {
   for (let square of squares) {
-    let currentSquare = document.querySelector(
-      `[data-coord="${square.coords}"]`
-    );
+    let currentSquare = board.querySelector(`[data-coord="${square.coords}"]`);
     currentSquare.classList.add("placed-ship");
   }
-  setAdjacentSquares(squares);
+  setAdjacentSquares(squares, board, currentPlayer, ship);
 }
 
-function setAdjacentSquares(squaresToOccupy) {
-  const adjacentSquares = player.board.getAdjacentSquares(
-    player[selectedShip],
+function setAdjacentSquares(squaresToOccupy, board, currentPlayer, ship) {
+  const adjacentSquares = currentPlayer.board.getAdjacentSquares(
+    ship,
     squaresToOccupy
   );
   for (let square of adjacentSquares) {
-    let currentSquare = document.querySelector(
-      `[data-coord="${square.coords}"]`
-    );
+    let currentSquare = board.querySelector(`[data-coord="${square.coords}"]`);
     currentSquare.classList.add("adjacent-square");
   }
 }
 
-function checkShipOverlap(squares) {
+export function checkShipOverlap(squares, board) {
+  if (squares === false) return true;
   const checkSquares = [];
   for (let square of squares) {
-    let currentSquare = document.querySelector(
-      `[data-coord="${square.coords}"]`
-    );
+    let currentSquare = board.querySelector(`[data-coord="${square.coords}"]`);
     checkSquares.push(currentSquare);
   }
   return checkSquares.some(
@@ -160,9 +153,8 @@ function checkShipOverlap(squares) {
 }
 
 function checkGameReady() {
-  console.log(placeShips.every((ship) => ship.classList.contains("placed")));
   if (placeShips.every((ship) => ship.classList.contains("placed"))) {
-    startGame.disabled = false;
+    startButton.disabled = false;
   }
 }
 
