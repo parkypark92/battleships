@@ -1,5 +1,6 @@
 import { player, computer } from "./game.js";
 
+const startGame = document.querySelector(".start-game");
 const playerBoardDisplay = document.getElementById("gameboard-one");
 const computerBoardDisplay = document.getElementById("gameboard-two");
 const placeCarrier = document.getElementById("place-carrier");
@@ -73,6 +74,7 @@ function addPlayerBoardEvents() {
       player.board.addShip(player[selectedShip], square);
       createEvent(displayPlacedShip, square, currentSquare);
       currentShip.classList.add("placed");
+      checkGameReady();
     });
   }
 }
@@ -155,6 +157,13 @@ function checkShipOverlap(squares) {
       square.classList.contains("placed-ship") ||
       square.classList.contains("adjacent-square")
   );
+}
+
+function checkGameReady() {
+  console.log(placeShips.every((ship) => ship.classList.contains("placed")));
+  if (placeShips.every((ship) => ship.classList.contains("placed"))) {
+    startGame.disabled = false;
+  }
 }
 
 displayBoard(player.board, playerBoardDisplay);

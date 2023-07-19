@@ -51,13 +51,14 @@ export function initializeGameboard() {
           if (
             square !== undefined &&
             square.isOccupied === false &&
-            square.isAdjacentTo === false
+            !square.isAdjacentTo.some((e) => e.name === ship.name)
           ) {
-            square.isAdjacentTo = ship;
+            square.isAdjacentTo.push(ship);
             finalAdjacentSquares.push(square);
           }
         }
       }
+      console.log(finalAdjacentSquares);
       return finalAdjacentSquares;
     },
     calculateAdjacentSquares: function (square) {
@@ -100,7 +101,7 @@ function createSquare(x, y) {
     row: y,
     col: x,
     isOccupied: false,
-    isAdjacentTo: false,
+    isAdjacentTo: [],
     attacked: false,
   };
 }

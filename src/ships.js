@@ -1,5 +1,6 @@
-export function Ship(length) {
+export function Ship(name, length) {
   return {
+    name,
     length,
     hits: 0,
     direction: "vertical",
