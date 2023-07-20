@@ -1,8 +1,8 @@
 import { player, computer } from "./game.js";
 import { startGame } from "./game.js";
 
+//DOM
 const startButton = document.querySelector(".start-game");
-startButton.addEventListener("click", startGame);
 const playerBoardDisplay = document.getElementById("gameboard-one");
 export const computerBoardDisplay = document.getElementById("gameboard-two");
 const placeCarrier = document.getElementById("place-carrier");
@@ -20,6 +20,9 @@ const placeShips = [
 const directionButton = document.querySelector(".ship-direction");
 let selectedShip = "carrier";
 let currentShip = document.querySelector(`[data-ship="${selectedShip}"]`);
+
+//EVENT HANDLERS
+startButton.addEventListener("click", startGame);
 
 placeCarrier.classList.add("ship-selected");
 placeCarrier.addEventListener("click", selectShip);
@@ -82,6 +85,7 @@ function addPlayerBoardEvents() {
   }
 }
 
+//FUNCTIONS FOR PLAYER BOARD EVENTS
 function createEvent(callback, square, currentSquare) {
   let squaresToOccupy = player.board.checkShipPlacement(
     player[selectedShip],
@@ -153,12 +157,30 @@ export function checkShipOverlap(squares, board) {
   );
 }
 
+function addComputerBoardEvents() {
+  for (let square of computer.board.squares) {
+    let currentSquare = computerBoardDisplay.querySelector(
+      `[data-coord="${square.coords}"]`
+    );
+    currentSquare.addEventListener("click", () => {
+      attackSquare(computer, square);
+      currentSquare.classList.add("is-hit");
+    });
+  }
+}
+
+function attackSquare(targetPlayer, squareToAttack) {
+  targetPlayer.board.recieveAttack(squareToAttack.coords);
+}
+
 function checkGameReady() {
   if (placeShips.every((ship) => ship.classList.contains("placed"))) {
     startButton.disabled = false;
   }
 }
 
+//DISPLAY BOARDS
 displayBoard(player.board, playerBoardDisplay);
 addPlayerBoardEvents();
 displayBoard(computer.board, computerBoardDisplay);
+addComputerBoardEvents();

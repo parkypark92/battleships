@@ -37,6 +37,10 @@ html, body {
     box-shadow: 0 0 5px rgb(61, 61, 61) inset;
 }
 
+.placed {
+    background-color: rgb(65, 228, 65);
+}
+
 .boards {
     display: flex;
     justify-content: center;
@@ -67,4 +71,8 @@ td {
 
 .placed-ship {
     background-color: rgb(41, 41, 209);
+}
+
+.is-hit {
+    background-color: red;
 }
