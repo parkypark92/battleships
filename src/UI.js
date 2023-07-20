@@ -73,7 +73,8 @@ function addPlayerBoardEvents() {
       if (currentShip.classList.contains("placed")) return;
       if (currentSquare.classList.contains("illegal-placement")) return;
       if (currentSquare.classList.contains("placed-ship")) return;
-      player.board.addShip(player[selectedShip], square);
+      let squaresToOccupy = player.board.addShip(player[selectedShip], square);
+      player.board.occupySquares(player[selectedShip], squaresToOccupy);
       createEvent(displayPlacedShip, square, currentSquare);
       currentShip.classList.add("placed");
       checkGameReady();

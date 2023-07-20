@@ -17,6 +17,7 @@ export function startGame() {
 
 function placeComputerShips() {
   for (let ship of computer.ships) {
+    setRandomShipDirection(ship);
     let squaresToOccupy = computer.board.addShip(
       ship,
       computer.board.getSquare(randomCoords())
@@ -29,12 +30,8 @@ function placeComputerShips() {
       );
       overlap = checkShipOverlap(squaresToOccupy, computerBoardDisplay);
     }
-    displayPlacedShip(
-      squaresToOccupy,
-      computerBoardDisplay,
-      computer,
-      ship.name
-    );
+    computer.board.occupySquares(ship, squaresToOccupy);
+    displayPlacedShip(squaresToOccupy, computerBoardDisplay, computer, ship);
   }
 }
 
@@ -44,4 +41,13 @@ function randomNumber() {
 
 function randomCoords() {
   return `${randomNumber()}, ${randomNumber()}`;
+}
+
+function setRandomShipDirection(ship) {
+  const number = randomNumber();
+  if (number >= 0 && number <= 4) {
+    ship.direction = "vertical";
+  } else if (number >= 5 && number <= 9) {
+    ship.direction = "horizontal";
+  }
 }

@@ -12,10 +12,6 @@ export function initializeGameboard() {
     },
     addShip: function (ship, square) {
       let squaresToOccupy = this.checkShipPlacement(ship, square);
-      if (squaresToOccupy === false) {
-        return false;
-      }
-      this.occupySquares(ship, squaresToOccupy);
       return squaresToOccupy;
     },
     checkShipPlacement: function (ship, square) {
