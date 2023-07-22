@@ -1,9 +1,10 @@
 import { player, computer } from "./game.js";
 import { startGame } from "./game.js";
+import { attackSquare, computerTurn } from "./app.js";
 
 //DOM
 const startButton = document.querySelector(".start-game");
-const playerBoardDisplay = document.getElementById("gameboard-one");
+export const playerBoardDisplay = document.getElementById("gameboard-one");
 export const computerBoardDisplay = document.getElementById("gameboard-two");
 const placeCarrier = document.getElementById("place-carrier");
 placeCarrier.classList.add("ship-selected");
@@ -21,6 +22,10 @@ const placeShips = [
 const directionButton = document.querySelector(".ship-direction");
 let selectedShip = "carrier";
 let currentShip = document.querySelector(`[data-ship="${selectedShip}"]`);
+
+export function getSquareFromDOM(board, coords) {
+  return board.querySelector(`[data-coord="${coords}"]`);
+}
 
 //BUTTON EVENTS
 startButton.addEventListener("click", () => {
@@ -179,8 +184,9 @@ function addComputerBoardEvents() {
     );
     currentSquare.addEventListener("click", () => {
       if (currentSquare.classList.contains("attacked")) return;
-      attackSquare(computer, square);
-      currentSquare.classList.add("attacked");
+      attackSquare(computer, square.coords);
+      markAttackedSquare(currentSquare);
+      computerTurn();
     });
   }
 }
@@ -197,14 +203,15 @@ export function makeUnclickable(...elements) {
   }
 }
 
-function attackSquare(targetPlayer, squareToAttack) {
-  targetPlayer.board.recieveAttack(squareToAttack.coords);
-}
-
 function checkGameReady() {
   if (placeShips.every((ship) => ship.classList.contains("placed"))) {
     startButton.classList.remove("unclickable");
   }
+}
+
+//OTHER FUNCTIONS
+export function markAttackedSquare(square) {
+  square.classList.add("attacked");
 }
 
 //DISPLAY BOARDS

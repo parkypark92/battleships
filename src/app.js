@@ -1,5 +1,29 @@
-import { initializeGameboard } from "../src/gameboard.js";
-import { Ship } from "../src/ships.js";
-import { player } from "./game.js";
+import { computerBoardDisplay, makeClickable, makeUnclickable } from "./UI";
+import { attackPlayer } from "./computer-logic.js";
 
-export function placePlayerShips() {}
+export function randomNumber() {
+  return Math.floor(Math.random() * 10);
+}
+
+export function randomCoords() {
+  return `${randomNumber()}, ${randomNumber()}`;
+}
+
+export function decideFirstTurn() {
+  const number = randomNumber();
+  number >= 0 && number <= 4 ? "player" : "computer";
+}
+
+export function playerTurn() {
+  makeClickable(computerBoardDisplay);
+}
+
+export function computerTurn() {
+  makeUnclickable(computerBoardDisplay);
+  attackPlayer();
+  playerTurn();
+}
+
+export function attackSquare(targetPlayer, coords) {
+  targetPlayer.board.recieveAttack(coords);
+}

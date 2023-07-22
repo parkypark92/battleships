@@ -1,10 +1,14 @@
+import { randomNumber, randomCoords, attackSquare } from "./app.js";
 import {
   displayPlacedShip,
   computerBoardDisplay,
+  playerBoardDisplay,
   checkShipOverlap,
+  getSquareFromDOM,
+  markAttackedSquare,
+  makeUnclickable,
 } from "./UI.js";
-
-import { computer } from "./game.js";
+import { computer, player } from "./game.js";
 
 export function placeComputerShips() {
   for (let ship of computer.ships) {
@@ -26,12 +30,11 @@ export function placeComputerShips() {
   }
 }
 
-function randomNumber() {
-  return Math.floor(Math.random() * 10);
-}
-
-function randomCoords() {
-  return `${randomNumber()}, ${randomNumber()}`;
+export function attackPlayer() {
+  let squareToAttack = getSquareFromDOM(playerBoardDisplay, randomCoords());
+  console.log(squareToAttack);
+  attackSquare(player, squareToAttack.getAttribute("data-coord"));
+  markAttackedSquare(squareToAttack);
 }
 
 function setRandomShipDirection(ship) {
