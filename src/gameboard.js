@@ -74,7 +74,6 @@ export function initializeGameboard() {
     occupySquares: function (ship, squaresToOccupy) {
       for (let square of squaresToOccupy) {
         square.isOccupied = ship;
-        console.log(square);
       }
     },
     recieveAttack: function (coordinates) {

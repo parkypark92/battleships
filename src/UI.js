@@ -6,6 +6,7 @@ const startButton = document.querySelector(".start-game");
 const playerBoardDisplay = document.getElementById("gameboard-one");
 export const computerBoardDisplay = document.getElementById("gameboard-two");
 const placeCarrier = document.getElementById("place-carrier");
+placeCarrier.classList.add("ship-selected");
 const placeBattleship = document.getElementById("place-battleship");
 const placeDestroyer = document.getElementById("place-destroyer");
 const placeSubmarine = document.getElementById("place-submarine");
@@ -21,16 +22,41 @@ const directionButton = document.querySelector(".ship-direction");
 let selectedShip = "carrier";
 let currentShip = document.querySelector(`[data-ship="${selectedShip}"]`);
 
-//EVENT HANDLERS
-startButton.addEventListener("click", startGame);
-
-placeCarrier.classList.add("ship-selected");
+//BUTTON EVENTS
+startButton.addEventListener("click", () => {
+  removeShipSelection();
+  makeUnclickable(
+    placeCarrier,
+    placeBattleship,
+    placeDestroyer,
+    placeSubmarine,
+    placePatrolBoat
+  );
+  hideButtons(startButton, directionButton);
+  startGame();
+});
 placeCarrier.addEventListener("click", selectShip);
 placeBattleship.addEventListener("click", selectShip);
 placeDestroyer.addEventListener("click", selectShip);
 placeSubmarine.addEventListener("click", selectShip);
 placePatrolBoat.addEventListener("click", selectShip);
-directionButton.addEventListener("click", () => {
+directionButton.addEventListener("click", changeShipDirection);
+
+//FUNCTIONS FOR BUTTON EVENTS
+function selectShip() {
+  removeShipSelection();
+  this.classList.add("ship-selected");
+  selectedShip = this.getAttribute("data-ship");
+  currentShip = document.querySelector(`[data-ship="${selectedShip}"]`);
+}
+
+function removeShipSelection() {
+  for (let ship of placeShips) {
+    ship.classList.remove("ship-selected");
+  }
+}
+
+function changeShipDirection() {
   for (let ship of player.ships) {
     ship.changeDirection();
   }
@@ -39,23 +65,11 @@ directionButton.addEventListener("click", () => {
   } else {
     directionButton.textContent = "Vertical";
   }
-});
-
-function selectShip() {
-  for (let ship of placeShips) {
-    ship.classList.remove("ship-selected");
-  }
-  this.classList.add("ship-selected");
-  selectedShip = this.getAttribute("data-ship");
-  currentShip = document.querySelector(`[data-ship="${selectedShip}"]`);
 }
 
-function displayBoard(board, boardTable) {
-  for (let square of board.squares) {
-    const tableSquare = document.createElement("td");
-    tableSquare.setAttribute("data-coord", square.coords);
-    const currentRow = boardTable.querySelector(`.row${square.row}`);
-    currentRow.appendChild(tableSquare);
+function hideButtons(...args) {
+  for (let button of args) {
+    button.classList.add("hidden");
   }
 }
 
@@ -157,15 +171,29 @@ export function checkShipOverlap(squares, board) {
   );
 }
 
+//EVENTS FOR COMPUTER BOARD
 function addComputerBoardEvents() {
   for (let square of computer.board.squares) {
     let currentSquare = computerBoardDisplay.querySelector(
       `[data-coord="${square.coords}"]`
     );
     currentSquare.addEventListener("click", () => {
+      if (currentSquare.classList.contains("attacked")) return;
       attackSquare(computer, square);
-      currentSquare.classList.add("is-hit");
+      currentSquare.classList.add("attacked");
     });
+  }
+}
+
+export function makeClickable(...elements) {
+  for (let element of elements) {
+    element.classList.remove("unclickable");
+  }
+}
+
+export function makeUnclickable(...elements) {
+  for (let element of elements) {
+    element.classList.add("unclickable");
   }
 }
 
@@ -175,12 +203,27 @@ function attackSquare(targetPlayer, squareToAttack) {
 
 function checkGameReady() {
   if (placeShips.every((ship) => ship.classList.contains("placed"))) {
-    startButton.disabled = false;
+    startButton.classList.remove("unclickable");
   }
 }
 
 //DISPLAY BOARDS
-displayBoard(player.board, playerBoardDisplay);
-addPlayerBoardEvents();
-displayBoard(computer.board, computerBoardDisplay);
-addComputerBoardEvents();
+function displayBoard(board, boardTable) {
+  for (let square of board.squares) {
+    const tableSquare = document.createElement("td");
+    tableSquare.setAttribute("data-coord", square.coords);
+    const currentRow = boardTable.querySelector(`.row${square.row}`);
+    currentRow.appendChild(tableSquare);
+  }
+}
+
+function initializeGame() {
+  displayBoard(player.board, playerBoardDisplay);
+  addPlayerBoardEvents();
+  displayBoard(computer.board, computerBoardDisplay);
+  addComputerBoardEvents();
+  makeUnclickable(startButton);
+  makeUnclickable(computerBoardDisplay);
+}
+
+initializeGame();
