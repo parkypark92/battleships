@@ -31,8 +31,10 @@ export function placeComputerShips() {
 }
 
 export function attackPlayer() {
-  let squareToAttack = getSquareFromDOM(playerBoardDisplay, randomCoords());
-  console.log(squareToAttack);
+  let squareToAttack = getSquareFromDOM(playerBoardDisplay, "0, 0");
+  while (squareToAttack.classList.contains("attacked")) {
+    squareToAttack = getSquareFromDOM(playerBoardDisplay, randomCoords());
+  }
   attackSquare(player, squareToAttack.getAttribute("data-coord"));
   markAttackedSquare(squareToAttack);
 }

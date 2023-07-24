@@ -11,7 +11,11 @@ export function randomCoords() {
 
 export function decideFirstTurn() {
   const number = randomNumber();
-  number >= 0 && number <= 4 ? "player" : "computer";
+  if (number >= 0 && number <= 4) {
+    return "player";
+  } else {
+    return "computer";
+  }
 }
 
 export function playerTurn() {
