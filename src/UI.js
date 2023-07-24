@@ -97,6 +97,7 @@ function addPlayerBoardEvents() {
       if (currentSquare.classList.contains("placed-ship")) return;
       let squaresToOccupy = player.board.addShip(player[selectedShip], square);
       player.board.occupySquares(player[selectedShip], squaresToOccupy);
+      addShipPlacedClass(squaresToOccupy, playerBoardDisplay);
       createEvent(displayPlacedShip, square, currentSquare);
       currentShip.classList.add("placed");
       checkGameReady();
@@ -143,15 +144,28 @@ function displayIllegalPlacement(square) {
   square.classList.toggle("illegal-placement");
 }
 
+export function addShipPlacedClass(squares, board) {
+  for (let square of squares) {
+    let currentSquare = board.querySelector(`[data-coord="${square.coords}"]`);
+    currentSquare.classList.add("has-ship");
+  }
+}
+
 export function displayPlacedShip(squares, board, currentPlayer, ship) {
   for (let square of squares) {
     let currentSquare = board.querySelector(`[data-coord="${square.coords}"]`);
+    currentSquare.classList.remove("placement-preview");
     currentSquare.classList.add("placed-ship");
   }
   setAdjacentSquares(squares, board, currentPlayer, ship);
 }
 
-function setAdjacentSquares(squaresToOccupy, board, currentPlayer, ship) {
+export function setAdjacentSquares(
+  squaresToOccupy,
+  board,
+  currentPlayer,
+  ship
+) {
   const adjacentSquares = currentPlayer.board.getAdjacentSquares(
     ship,
     squaresToOccupy
@@ -171,7 +185,7 @@ export function checkShipOverlap(squares, board) {
   }
   return checkSquares.some(
     (square) =>
-      square.classList.contains("placed-ship") ||
+      square.classList.contains("has-ship") ||
       square.classList.contains("adjacent-square")
   );
 }
@@ -183,9 +197,19 @@ function addComputerBoardEvents() {
       `[data-coord="${square.coords}"]`
     );
     currentSquare.addEventListener("click", () => {
-      if (currentSquare.classList.contains("attacked")) return;
+      if (
+        currentSquare.classList.contains("attacked") ||
+        currentSquare.classList.contains("hit")
+      )
+        return;
       attackSquare(computer, square.coords);
-      markAttackedSquare(currentSquare);
+      console.log(square.isOccupied);
+      if (square.isOccupied) {
+        markSquareAsHit(currentSquare);
+      } else {
+        markSquareAsAttacked(currentSquare);
+      }
+
       computerTurn();
     });
   }
@@ -210,8 +234,12 @@ function checkGameReady() {
 }
 
 //OTHER FUNCTIONS
-export function markAttackedSquare(square) {
+export function markSquareAsAttacked(square) {
   square.classList.add("attacked");
+}
+
+export function markSquareAsHit(square) {
+  square.classList.add("hit");
 }
 
 //DISPLAY BOARDS
@@ -221,6 +249,9 @@ function displayBoard(board, boardTable) {
     tableSquare.setAttribute("data-coord", square.coords);
     const currentRow = boardTable.querySelector(`.row${square.row}`);
     currentRow.appendChild(tableSquare);
+    if (board === player.board) {
+      tableSquare.classList.add("player-square");
+    }
   }
 }
 
@@ -229,7 +260,7 @@ function initializeGame() {
   addPlayerBoardEvents();
   displayBoard(computer.board, computerBoardDisplay);
   addComputerBoardEvents();
-  makeUnclickable(startButton);
+  // makeUnclickable(startButton);
   makeUnclickable(computerBoardDisplay);
 }
 

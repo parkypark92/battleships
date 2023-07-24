@@ -17,5 +17,6 @@ export function Ship(name, length) {
     isSunk: function () {
       return this.hits === this.length ? true : false;
     },
+    placedCoords: [],
   };
 }

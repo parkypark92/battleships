@@ -69,7 +69,7 @@ td {
     background-color: rgb(120, 120, 245);
 }
 
-.adjacent-square {
+.player-square.adjacent-square {
     background-color: #e7e7e7;
 }
 
@@ -82,5 +82,9 @@ td {
 }
 
 .attacked {
+    background-color: rgb(90, 90, 90);
+}
+
+.hit {
     background-color: red;
 }

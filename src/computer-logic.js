@@ -5,8 +5,11 @@ import {
   playerBoardDisplay,
   checkShipOverlap,
   getSquareFromDOM,
-  markAttackedSquare,
+  markSquareAsAttacked,
+  markSquareAsHit,
   makeUnclickable,
+  setAdjacentSquares,
+  addShipPlacedClass,
 } from "./UI.js";
 import { computer, player } from "./game.js";
 
@@ -26,17 +29,28 @@ export function placeComputerShips() {
       overlap = checkShipOverlap(squaresToOccupy, computerBoardDisplay);
     }
     computer.board.occupySquares(ship, squaresToOccupy);
-    displayPlacedShip(squaresToOccupy, computerBoardDisplay, computer, ship);
+    addShipPlacedClass(squaresToOccupy, computerBoardDisplay);
+    setAdjacentSquares(squaresToOccupy, computerBoardDisplay, computer, ship);
   }
 }
 
 export function attackPlayer() {
-  let squareToAttack = getSquareFromDOM(playerBoardDisplay, "0, 0");
-  while (squareToAttack.classList.contains("attacked")) {
-    squareToAttack = getSquareFromDOM(playerBoardDisplay, randomCoords());
+  let boardSquare = getSquareFromDOM(playerBoardDisplay, randomCoords());
+  while (
+    boardSquare.classList.contains("attacked") ||
+    boardSquare.classList.contains("hit")
+  ) {
+    boardSquare = getSquareFromDOM(playerBoardDisplay, randomCoords());
   }
-  attackSquare(player, squareToAttack.getAttribute("data-coord"));
-  markAttackedSquare(squareToAttack);
+  const squareToAttack = player.board.getSquare(
+    boardSquare.getAttribute("data-coord")
+  );
+  attackSquare(player, squareToAttack.coords);
+  if (squareToAttack.isOccupied) {
+    markSquareAsHit(boardSquare);
+  } else {
+    markSquareAsAttacked(boardSquare);
+  }
 }
 
 function setRandomShipDirection(ship) {
