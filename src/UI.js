@@ -1,6 +1,11 @@
 import { player, computer } from "./game.js";
 import { startGame } from "./game.js";
-import { attackSquare, computerTurn } from "./app.js";
+import {
+  attackSquare,
+  computerTurn,
+  checkAllSunk,
+  declareWinner,
+} from "./app.js";
 
 //DOM
 const startButton = document.querySelector(".start-game");
@@ -22,6 +27,7 @@ const placeShips = [
 const directionButton = document.querySelector(".ship-direction");
 let selectedShip = "carrier";
 let currentShip = document.querySelector(`[data-ship="${selectedShip}"]`);
+export const winnerDisplay = document.querySelector(".winner");
 
 export function getSquareFromDOM(board, coords) {
   return board.querySelector(`[data-coord="${coords}"]`);
@@ -203,13 +209,15 @@ function addComputerBoardEvents() {
       )
         return;
       attackSquare(computer, square.coords);
-      console.log(square.isOccupied);
       if (square.isOccupied) {
         markSquareAsHit(currentSquare);
       } else {
         markSquareAsAttacked(currentSquare);
       }
-
+      if (checkAllSunk(computer.ships)) {
+        declareWinner(player);
+        return;
+      }
       computerTurn();
     });
   }

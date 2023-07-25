@@ -1,7 +1,7 @@
 import { Ship } from "./ships.js";
 import { initializeGameboard } from "./gameboard.js";
 
-export function Player() {
+export function Player(name) {
   const board = initializeGameboard();
   const carrier = Ship("carrier", 5);
   const battleship = Ship("battleship", 4);
@@ -10,6 +10,7 @@ export function Player() {
   const patrolBoat = Ship("patrol-boat", 2);
   const ships = [carrier, battleship, destroyer, submarine, patrolBoat];
   return {
+    name,
     board,
     carrier,
     battleship,

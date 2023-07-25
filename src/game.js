@@ -2,8 +2,8 @@ import { Player } from "./players.js";
 import { placeComputerShips } from "./computer-logic.js";
 import { computerTurn, decideFirstTurn, playerTurn } from "./app.js";
 
-export let player = Player();
-export let computer = Player();
+export let player = Player("Player");
+export let computer = Player("Computer");
 
 let winner = false;
 

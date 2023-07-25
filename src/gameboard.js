@@ -75,7 +75,6 @@ export function initializeGameboard() {
       for (let square of squaresToOccupy) {
         square.isOccupied = ship;
         ship.placedCoords.push(square.coords);
-        console.log(ship.placedCoords);
       }
     },
     recieveAttack: function (coordinates) {
@@ -90,6 +89,7 @@ export function initializeGameboard() {
     hasShips: function () {
       return this.squares.some((square) => square.isOccupied !== false);
     },
+    checkForWin: function () {},
   };
 }
 
