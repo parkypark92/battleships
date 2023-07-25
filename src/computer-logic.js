@@ -7,6 +7,7 @@ import {
   getSquareFromDOM,
   markSquareAsAttacked,
   markSquareAsHit,
+  markShipAsSunk,
   makeUnclickable,
   setAdjacentSquares,
   addShipPlacedClass,
@@ -48,6 +49,12 @@ export function attackPlayer() {
   attackSquare(player, squareToAttack.coords);
   if (squareToAttack.isOccupied) {
     markSquareAsHit(boardSquare);
+    if (squareToAttack.isOccupied.isSunk()) {
+      markShipAsSunk(
+        playerBoardDisplay,
+        squareToAttack.isOccupied.placedCoords
+      );
+    }
   } else {
     markSquareAsAttacked(boardSquare);
   }

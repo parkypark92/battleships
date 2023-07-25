@@ -88,3 +88,7 @@ td {
 .hit {
     background-color: rgb(255, 136, 0);
 }
+
+.sunk {
+    background-color: red;
+}

@@ -33,6 +33,7 @@ export function computerTurn() {
   attackPlayer();
   if (checkAllSunk(player.ships)) {
     declareWinner(computer);
+    return;
   }
   playerTurn();
 }

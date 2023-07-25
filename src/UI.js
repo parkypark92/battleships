@@ -211,9 +211,13 @@ function addComputerBoardEvents() {
       attackSquare(computer, square.coords);
       if (square.isOccupied) {
         markSquareAsHit(currentSquare);
+        if (square.isOccupied.isSunk()) {
+          markShipAsSunk(computerBoardDisplay, square.isOccupied.placedCoords);
+        }
       } else {
         markSquareAsAttacked(currentSquare);
       }
+
       if (checkAllSunk(computer.ships)) {
         declareWinner(player);
         return;
@@ -248,6 +252,13 @@ export function markSquareAsAttacked(square) {
 
 export function markSquareAsHit(square) {
   square.classList.add("hit");
+}
+
+export function markShipAsSunk(board, shipsCoords) {
+  for (let coords of shipsCoords) {
+    let currentSquare = board.querySelector(`[data-coord="${coords}"]`);
+    currentSquare.classList.add("sunk");
+  }
 }
 
 //DISPLAY BOARDS
