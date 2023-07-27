@@ -5,7 +5,7 @@ import {
   playerBoardDisplay,
   checkShipOverlap,
   getSquareFromDOM,
-  markSquareAsAttacked,
+  markSquareAsMissed,
   markSquareAsHit,
   markShipAsSunk,
   makeUnclickable,
@@ -37,10 +37,7 @@ export function placeComputerShips() {
 
 export function attackPlayer() {
   let boardSquare = getSquareFromDOM(playerBoardDisplay, randomCoords());
-  while (
-    boardSquare.classList.contains("attacked") ||
-    boardSquare.classList.contains("hit")
-  ) {
+  while (boardSquare.classList.contains("attacked")) {
     boardSquare = getSquareFromDOM(playerBoardDisplay, randomCoords());
   }
   const squareToAttack = player.board.getSquare(
@@ -56,7 +53,7 @@ export function attackPlayer() {
       );
     }
   } else {
-    markSquareAsAttacked(boardSquare);
+    markSquareAsMissed(boardSquare);
   }
 }
 

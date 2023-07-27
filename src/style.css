@@ -1,3 +1,7 @@
+:root {
+    --radar-green: #63c45a;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -8,11 +12,20 @@ html, body {
     height: 100%;
 }
 
+body {
+    background-color: #cacaca;
+}
+
 .main-wrapper {
     min-height: 875px;
     display: flex;
     flex-direction: column;
     justify-content: center;
+}
+
+.battleship-heading {
+    text-align: center;
+    padding-top: 10px;
 }
 
 .player-ships {
@@ -38,7 +51,7 @@ html, body {
 }
 
 .placed {
-    background-color: rgb(65, 228, 65);
+    background-color: rgb(69, 228, 69);
 }
 
 .boards {
@@ -48,13 +61,14 @@ html, body {
 }
 
 .gameboard {
-    border: 1px solid black;
+    border: 2px solid var(--radar-green);
 }
 
 td {
     height: 50px;
     width: 50px;
-    border: 1px solid black;
+    border: 1px solid var(--radar-green);
+    background-color: #1c291e;
 }
 
 .unclickable {
@@ -66,29 +80,35 @@ td {
 }
 
 .placement-preview {
-    background-color: rgb(120, 120, 245);
+    background-color: rgb(20, 117, 20);
 }
 
-.player-square.adjacent-square {
+/* .player-square.adjacent-square {
     background-color: #e7e7e7;
-}
+} */
 
 .illegal-placement {
-    background-color: rgb(247, 78, 78);
+    background-color: rgb(54, 78, 52);
 }
 
 .placed-ship {
-    background-color: rgb(41, 41, 209);
+    background-color: rgb(36, 146, 26);
 }
 
-.attacked {
-    background-color: rgb(90, 90, 90);
+.miss, .hit {
+    height: 8px;
+    width: 8px;    
+    background-color: var(--radar-green);
+    border-radius: 50%;
+    margin: auto;
+    box-shadow: 0 0 3px 3px var(--radar-green);
 }
 
 .hit {
-    background-color: rgb(255, 136, 0);
+    background-color: rgb(167, 12, 12);
+    box-shadow: 0 0 3px 3px rgb(167, 12, 12) ;
 }
 
 .sunk {
-    background-color: red;
+    background-color: rgb(36, 146, 26);
 }

@@ -13,6 +13,7 @@ export const playerBoardDisplay = document.getElementById("gameboard-one");
 export const computerBoardDisplay = document.getElementById("gameboard-two");
 const placeCarrier = document.getElementById("place-carrier");
 placeCarrier.classList.add("ship-selected");
+placeCarrier.textContent = `Carrier(${player.carrier.length})`;
 const placeBattleship = document.getElementById("place-battleship");
 const placeDestroyer = document.getElementById("place-destroyer");
 const placeSubmarine = document.getElementById("place-submarine");
@@ -215,7 +216,7 @@ function addComputerBoardEvents() {
           markShipAsSunk(computerBoardDisplay, square.isOccupied.placedCoords);
         }
       } else {
-        markSquareAsAttacked(currentSquare);
+        markSquareAsMissed(currentSquare);
       }
 
       if (checkAllSunk(computer.ships)) {
@@ -246,12 +247,18 @@ function checkGameReady() {
 }
 
 //OTHER FUNCTIONS
-export function markSquareAsAttacked(square) {
+export function markSquareAsMissed(square) {
+  const miss = document.createElement("div");
   square.classList.add("attacked");
+  miss.classList.add("miss");
+  square.appendChild(miss);
 }
 
 export function markSquareAsHit(square) {
-  square.classList.add("hit");
+  const hit = document.createElement("div");
+  square.classList.add("attacked");
+  hit.classList.add("hit");
+  square.appendChild(hit);
 }
 
 export function markShipAsSunk(board, shipsCoords) {
