@@ -8,7 +8,7 @@ import {
 } from "./app.js";
 
 //DOM
-const startButton = document.querySelector(".start-game");
+// const startButton = document.querySelector(".start-game");
 export const playerBoardDisplay = document.getElementById("gameboard-one");
 export const computerBoardDisplay = document.getElementById("gameboard-two");
 const placeCarrier = document.getElementById("place-carrier");
@@ -35,18 +35,7 @@ export function getSquareFromDOM(board, coords) {
 }
 
 //BUTTON EVENTS
-startButton.addEventListener("click", () => {
-  removeShipSelection();
-  makeUnclickable(
-    placeCarrier,
-    placeBattleship,
-    placeDestroyer,
-    placeSubmarine,
-    placePatrolBoat
-  );
-  hideButtons(startButton, directionButton);
-  startGame();
-});
+
 placeCarrier.addEventListener("click", selectShip);
 placeBattleship.addEventListener("click", selectShip);
 placeDestroyer.addEventListener("click", selectShip);
@@ -60,6 +49,19 @@ function selectShip() {
   this.classList.add("ship-selected");
   selectedShip = this.getAttribute("data-ship");
   currentShip = document.querySelector(`[data-ship="${selectedShip}"]`);
+}
+
+function prepareNextShip() {
+  removeShipSelection();
+  let currentIndex = placeShips.indexOf(currentShip);
+  if (currentIndex < placeShips.length - 1) {
+    currentIndex++;
+  } else {
+    return;
+  }
+  currentShip = placeShips[currentIndex];
+  selectedShip = currentShip.getAttribute("data-ship");
+  currentShip.classList.add("ship-selected");
 }
 
 function removeShipSelection() {
@@ -85,6 +87,15 @@ function hideButtons(...args) {
   }
 }
 
+function addShowHoverClass(boardSquares, boardDisplay) {
+  for (let square of boardSquares) {
+    let currentSquare = boardDisplay.querySelector(
+      `[data-coord="${square.coords}"]`
+    );
+    currentSquare.classList.add("show-hover");
+  }
+}
+
 function addPlayerBoardEvents() {
   for (let square of player.board.squares) {
     let currentSquare = playerBoardDisplay.querySelector(
@@ -107,6 +118,7 @@ function addPlayerBoardEvents() {
       addShipPlacedClass(squaresToOccupy, playerBoardDisplay);
       createEvent(displayPlacedShip, square, currentSquare);
       currentShip.classList.add("placed");
+      prepareNextShip();
       checkGameReady();
     });
   }
@@ -218,11 +230,11 @@ function addComputerBoardEvents() {
       } else {
         markSquareAsMissed(currentSquare);
       }
-
       if (checkAllSunk(computer.ships)) {
         declareWinner(player);
         return;
       }
+      currentSquare.classList.remove("show-hover");
       computerTurn();
     });
   }
@@ -242,7 +254,17 @@ export function makeUnclickable(...elements) {
 
 function checkGameReady() {
   if (placeShips.every((ship) => ship.classList.contains("placed"))) {
-    startButton.classList.remove("unclickable");
+    removeShipSelection();
+    makeUnclickable(
+      placeCarrier,
+      placeBattleship,
+      placeDestroyer,
+      placeSubmarine,
+      placePatrolBoat
+    );
+    hideButtons(directionButton);
+    addShowHoverClass(computer.board.squares, computerBoardDisplay);
+    startGame();
   }
 }
 
@@ -286,7 +308,6 @@ function initializeGame() {
   addPlayerBoardEvents();
   displayBoard(computer.board, computerBoardDisplay);
   addComputerBoardEvents();
-  // makeUnclickable(startButton);
   makeUnclickable(computerBoardDisplay);
 }
 
