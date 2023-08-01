@@ -8,9 +8,11 @@ import {
 } from "./app.js";
 
 //DOM
-// const startButton = document.querySelector(".start-game");
 export const playerBoardDisplay = document.getElementById("gameboard-one");
 export const computerBoardDisplay = document.getElementById("gameboard-two");
+export const playerMessage = document.querySelector(".player-messages");
+export const computerMessage = document.querySelector(".computer-messages");
+const shipType = document.querySelector(".ship-type");
 const placeCarrier = document.getElementById("place-carrier");
 placeCarrier.classList.add("ship-selected");
 placeCarrier.textContent = `Carrier(${player.carrier.length})`;
@@ -25,10 +27,9 @@ const placeShips = [
   placeSubmarine,
   placePatrolBoat,
 ];
-const directionButton = document.querySelector(".ship-direction");
+const directionButton = document.querySelector(".ship-direction-button");
 let selectedShip = "carrier";
 let currentShip = document.querySelector(`[data-ship="${selectedShip}"]`);
-export const winnerDisplay = document.querySelector(".winner");
 
 export function getSquareFromDOM(board, coords) {
   return board.querySelector(`[data-coord="${coords}"]`);
@@ -62,6 +63,7 @@ function prepareNextShip() {
   currentShip = placeShips[currentIndex];
   selectedShip = currentShip.getAttribute("data-ship");
   currentShip.classList.add("ship-selected");
+  shipType.textContent = `Type: ${selectedShip}`;
 }
 
 function removeShipSelection() {
@@ -226,16 +228,21 @@ function addComputerBoardEvents() {
         markSquareAsHit(currentSquare);
         if (square.isOccupied.isSunk()) {
           markShipAsSunk(computerBoardDisplay, square.isOccupied.placedCoords);
+          displaySunkMessage(playerMessage, square.isOccupied);
+        } else {
+          displayHitMessage(playerMessage);
         }
       } else {
         markSquareAsMissed(currentSquare);
+        displayMissMessage(playerMessage);
       }
       if (checkAllSunk(computer.ships)) {
         declareWinner(player);
         return;
       }
       currentSquare.classList.remove("show-hover");
-      computerTurn();
+      makeUnclickable(computerBoardDisplay);
+      setTimeout(computerTurn, 2500);
     });
   }
 }
@@ -287,6 +294,38 @@ export function markShipAsSunk(board, shipsCoords) {
   for (let coords of shipsCoords) {
     let currentSquare = board.querySelector(`[data-coord="${coords}"]`);
     currentSquare.classList.add("sunk");
+  }
+}
+
+export function clearMessages() {
+  playerMessage.textContent = "";
+  computerMessage.textContent = "";
+}
+
+export function displayMissMessage(messageBox) {
+  clearMessages();
+  typewriter(messageBox, `It's a miss...`);
+}
+
+export function displayHitMessage(messageBox) {
+  clearMessages();
+  typewriter(messageBox, `It's a hit!`);
+}
+
+export function displaySunkMessage(messageBox, ship) {
+  clearMessages();
+  if (messageBox === playerMessage) {
+    typewriter(messageBox, `You sunk Computers ${ship.name}!`);
+  } else {
+    typewriter(messageBox, `Computer sunk your ${ship.name}`);
+  }
+}
+
+export function typewriter(messageBox, message, i = 0) {
+  if (i < message.length) {
+    messageBox.textContent += message.charAt(i);
+    i++;
+    setTimeout(() => typewriter(messageBox, message, i), 50);
   }
 }
 

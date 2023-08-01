@@ -2,7 +2,9 @@ import {
   computerBoardDisplay,
   makeClickable,
   makeUnclickable,
-  winnerDisplay,
+  playerMessage,
+  computerMessage,
+  typewriter,
 } from "./UI";
 import { attackPlayer } from "./computer-logic.js";
 import { computer, player } from "./game";
@@ -24,18 +26,23 @@ export function decideFirstTurn() {
   }
 }
 
-export function playerTurn() {
-  makeClickable(computerBoardDisplay);
+export function playerTurn(firstTurn) {
+  if (firstTurn !== "player") {
+    typewriter(playerMessage, "Players turn.");
+  }
+  setTimeout(() => makeClickable(computerBoardDisplay), 1500);
 }
 
-export function computerTurn() {
-  makeUnclickable(computerBoardDisplay);
-  attackPlayer();
+export function computerTurn(firstTurn) {
+  if (firstTurn !== "computer") {
+    typewriter(computerMessage, `Computers turn.`);
+  }
+  setTimeout(attackPlayer, 2500);
   if (checkAllSunk(player.ships)) {
     declareWinner(computer);
     return;
   }
-  playerTurn();
+  setTimeout(playerTurn, 5000);
 }
 
 export function attackSquare(targetPlayer, coords) {
@@ -43,11 +50,15 @@ export function attackSquare(targetPlayer, coords) {
 }
 
 export function checkAllSunk(ships) {
-  console.log(ships.every((ship) => ship.isSunk() === true));
   return ships.every((ship) => ship.isSunk() === true);
 }
 
 export function declareWinner(winner) {
-  winnerDisplay.textContent = winner.name;
+  if (winner === player) {
+    playerMessage.textContent = `${winner.name} Wins!`;
+  } else if (winner === computer) {
+    computerMessage.textContent = `${computer.name} Wins!`;
+  }
+
   makeUnclickable(computerBoardDisplay);
 }

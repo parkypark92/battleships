@@ -7,7 +7,7 @@ export function Player(name) {
   const battleship = Ship("battleship", 4);
   const destroyer = Ship("destroyer", 3);
   const submarine = Ship("submarine", 3);
-  const patrolBoat = Ship("patrol-boat", 2);
+  const patrolBoat = Ship("patrol boat", 2);
   const ships = [carrier, battleship, destroyer, submarine, patrolBoat];
   return {
     name,

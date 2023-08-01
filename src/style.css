@@ -37,9 +37,23 @@ body {
 }
 
 .player-messages, .computer-messages {
+   display: flex;
+   justify-content: center;
+   align-items: center;
+}
+
+.ship-placement-message {
     display: flex;
-    justify-content: center;
-    align-items: center;
+    flex-direction: column;
+    gap: 30px;
+    padding-top: 30px;
+    width: fit-content;
+    margin: auto;
+}
+
+.ship-direction {
+    display: flex;
+    gap: 20px;
 }
 
 .player-ships {

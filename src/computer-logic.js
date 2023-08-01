@@ -11,6 +11,10 @@ import {
   makeUnclickable,
   setAdjacentSquares,
   addShipPlacedClass,
+  computerMessage,
+  displayHitMessage,
+  displayMissMessage,
+  displaySunkMessage,
 } from "./UI.js";
 import { computer, player } from "./game.js";
 
@@ -46,14 +50,17 @@ export function attackPlayer() {
   attackSquare(player, squareToAttack.coords);
   if (squareToAttack.isOccupied) {
     markSquareAsHit(boardSquare);
+    displayHitMessage(computerMessage);
     if (squareToAttack.isOccupied.isSunk()) {
       markShipAsSunk(
         playerBoardDisplay,
         squareToAttack.isOccupied.placedCoords
       );
+      displaySunkMessage(computerMessage, squareToAttack.isOccupied);
     }
   } else {
     markSquareAsMissed(boardSquare);
+    displayMissMessage(computerMessage);
   }
 }
 
