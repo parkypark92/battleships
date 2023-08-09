@@ -1,3 +1,8 @@
+@font-face {
+    font-family: 'Press Start';
+    src: url('./Fonts/PressStart2P-Regular.ttf');
+}
+
 :root {
     --radar-green: #63c45a;
 }
@@ -13,19 +18,22 @@ html, body {
 }
 
 body {
-    background-color: #788b75;
+    background-color: #899687;
+    font-family: 'Press Start';
 }
 
 .main-wrapper {
-    grid-template: 100px 150px 575px 1fr / 1fr 2fr 2fr 1fr;
+    grid-template: 100px 150px 575px 1fr / 1.2fr 2fr 2fr 1.2fr;
     min-height: 875px;
     display: grid;
 }
 
 .battleship-heading {
     grid-area: 1 / 1 / 2 / 5;
-    text-align: center;
     padding-top: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .player-messages {
@@ -37,6 +45,7 @@ body {
 }
 
 .player-messages, .computer-messages {
+    font-family: 'Press Start';
    display: flex;
    justify-content: center;
    align-items: center;
@@ -45,33 +54,52 @@ body {
 .ship-placement-message {
     display: flex;
     flex-direction: column;
+    margin: auto;
     gap: 30px;
     padding-top: 30px;
-    width: fit-content;
-    margin: auto;
 }
 
 .ship-direction {
     display: flex;
+    align-items: center;
     gap: 20px;
+}
+
+.ship-direction-button {
+    font-family: 'Press Start';
+    height: 25px;
+    width: 180px;
 }
 
 .player-ships {
     grid-area: 3 / 1 / 4 / 2;
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: end;
-    gap: 40px;
+    gap: 20px;
+    padding-top: 70px;
 }
 
 .place-ship {
+    font-family: 'Press Start';
+    font-size: 0.7em;
     height: 40px;
-    width: 100px;
     background-color: rgb(164, 206, 255);
 }
 
-.ship-direction {
+#place-carrier {
+    width: 200px;
+}
+
+#place-battleship {
+    width: 160px;
+}
+
+#place-destroyer, #place-submarine {
+    width: 120px;
+}
+
+#place-patrol-boat {
     width: 80px;
 }
 

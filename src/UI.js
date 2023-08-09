@@ -1,5 +1,5 @@
 import { player, computer } from "./game.js";
-import { startGame } from "./game.js";
+import { startGame, winner } from "./game.js";
 import {
   attackSquare,
   computerTurn,
@@ -15,7 +15,6 @@ export const computerMessage = document.querySelector(".computer-messages");
 const shipType = document.querySelector(".ship-type");
 const placeCarrier = document.getElementById("place-carrier");
 placeCarrier.classList.add("ship-selected");
-placeCarrier.textContent = `Carrier(${player.carrier.length})`;
 const placeBattleship = document.getElementById("place-battleship");
 const placeDestroyer = document.getElementById("place-destroyer");
 const placeSubmarine = document.getElementById("place-submarine");
@@ -228,6 +227,10 @@ function addComputerBoardEvents() {
         markSquareAsHit(currentSquare);
         if (square.isOccupied.isSunk()) {
           markShipAsSunk(computerBoardDisplay, square.isOccupied.placedCoords);
+          if (checkAllSunk(computer.ships)) {
+            declareWinner(player);
+            return;
+          }
           displaySunkMessage(playerMessage, square.isOccupied);
         } else {
           displayHitMessage(playerMessage);
@@ -236,12 +239,9 @@ function addComputerBoardEvents() {
         markSquareAsMissed(currentSquare);
         displayMissMessage(playerMessage);
       }
-      if (checkAllSunk(computer.ships)) {
-        declareWinner(player);
-        return;
-      }
       currentSquare.classList.remove("show-hover");
       makeUnclickable(computerBoardDisplay);
+      if (winner === true) return;
       setTimeout(computerTurn, 2500);
     });
   }
@@ -317,7 +317,7 @@ export function displaySunkMessage(messageBox, ship) {
   if (messageBox === playerMessage) {
     typewriter(messageBox, `You sunk Computers ${ship.name}!`);
   } else {
-    typewriter(messageBox, `Computer sunk your ${ship.name}`);
+    typewriter(messageBox, `Computer sunk your ${ship.name}!`);
   }
 }
 

@@ -1,6 +1,5 @@
 import { randomNumber, randomCoords, attackSquare } from "./app.js";
 import {
-  displayPlacedShip,
   computerBoardDisplay,
   playerBoardDisplay,
   checkShipOverlap,
@@ -8,7 +7,6 @@ import {
   markSquareAsMissed,
   markSquareAsHit,
   markShipAsSunk,
-  makeUnclickable,
   setAdjacentSquares,
   addShipPlacedClass,
   computerMessage,
@@ -50,13 +48,18 @@ export function attackPlayer() {
   attackSquare(player, squareToAttack.coords);
   if (squareToAttack.isOccupied) {
     markSquareAsHit(boardSquare);
-    displayHitMessage(computerMessage);
     if (squareToAttack.isOccupied.isSunk()) {
       markShipAsSunk(
         playerBoardDisplay,
         squareToAttack.isOccupied.placedCoords
       );
+      if (checkAllSunk(player.ships)) {
+        declareWinner(computer);
+        return;
+      }
       displaySunkMessage(computerMessage, squareToAttack.isOccupied);
+    } else {
+      displayHitMessage(computerMessage);
     }
   } else {
     markSquareAsMissed(boardSquare);

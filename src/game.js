@@ -10,6 +10,7 @@ import { computerTurn, decideFirstTurn, playerTurn } from "./app.js";
 
 export let player = Player("Player");
 export let computer = Player("Computer");
+export let winner = false;
 
 export function startGame() {
   placeComputerShips();

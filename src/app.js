@@ -5,9 +5,10 @@ import {
   playerMessage,
   computerMessage,
   typewriter,
+  clearMessages,
 } from "./UI";
 import { attackPlayer } from "./computer-logic.js";
-import { computer, player } from "./game";
+import { computer, player, winner } from "./game";
 
 export function randomNumber() {
   return Math.floor(Math.random() * 10);
@@ -38,10 +39,7 @@ export function computerTurn(firstTurn) {
     typewriter(computerMessage, `Computers turn.`);
   }
   setTimeout(attackPlayer, 2500);
-  if (checkAllSunk(player.ships)) {
-    declareWinner(computer);
-    return;
-  }
+  if (winner === true) return;
   setTimeout(playerTurn, 5000);
 }
 
@@ -54,11 +52,12 @@ export function checkAllSunk(ships) {
 }
 
 export function declareWinner(winner) {
+  clearMessages();
   if (winner === player) {
     playerMessage.textContent = `${winner.name} Wins!`;
   } else if (winner === computer) {
     computerMessage.textContent = `${computer.name} Wins!`;
   }
-
   makeUnclickable(computerBoardDisplay);
+  winner = true;
 }
