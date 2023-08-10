@@ -19,7 +19,7 @@ const placeBattleship = document.getElementById("place-battleship");
 const placeDestroyer = document.getElementById("place-destroyer");
 const placeSubmarine = document.getElementById("place-submarine");
 const placePatrolBoat = document.getElementById("place-patrol-boat");
-const placeShips = [
+export const placeShips = [
   placeCarrier,
   placeBattleship,
   placeDestroyer,
@@ -29,6 +29,10 @@ const placeShips = [
 const directionButton = document.querySelector(".ship-direction-button");
 let selectedShip = "carrier";
 let currentShip = document.querySelector(`[data-ship="${selectedShip}"]`);
+export const computerShips = document.querySelectorAll(
+  ".computer-ships button"
+);
+console.log(computerShips);
 
 export function getSquareFromDOM(board, coords) {
   return board.querySelector(`[data-coord="${coords}"]`);
@@ -62,7 +66,7 @@ function prepareNextShip() {
   currentShip = placeShips[currentIndex];
   selectedShip = currentShip.getAttribute("data-ship");
   currentShip.classList.add("ship-selected");
-  shipType.textContent = `Type: ${selectedShip}`;
+  shipType.textContent = `Type: ${currentShip.textContent}`;
 }
 
 function removeShipSelection() {
@@ -227,6 +231,7 @@ function addComputerBoardEvents() {
         markSquareAsHit(currentSquare);
         if (square.isOccupied.isSunk()) {
           markShipAsSunk(computerBoardDisplay, square.isOccupied.placedCoords);
+          turnShipTokenRed(square.isOccupied, computerShips);
           if (checkAllSunk(computer.ships)) {
             declareWinner(player);
             return;
@@ -256,6 +261,12 @@ export function makeClickable(...elements) {
 export function makeUnclickable(...elements) {
   for (let element of elements) {
     element.classList.add("unclickable");
+  }
+}
+
+export function showShipsPlaced(ships) {
+  for (let ship of ships) {
+    ship.classList.add("placed");
   }
 }
 
@@ -295,6 +306,17 @@ export function markShipAsSunk(board, shipsCoords) {
     let currentSquare = board.querySelector(`[data-coord="${coords}"]`);
     currentSquare.classList.add("sunk");
   }
+}
+
+export function turnShipTokenRed(sunkenShip, playersShips) {
+  let shipToken;
+  for (let ship of playersShips) {
+    if (ship.getAttribute("data-ship") === sunkenShip.id) {
+      shipToken = ship;
+      console.log(shipToken);
+    }
+  }
+  shipToken.classList.add("token-red");
 }
 
 export function clearMessages() {

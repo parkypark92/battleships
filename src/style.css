@@ -67,7 +67,7 @@ body {
 
 .ship-direction-button {
     font-family: 'Press Start';
-    height: 25px;
+    height: 28px;
     width: 180px;
 }
 
@@ -84,32 +84,33 @@ body {
     font-family: 'Press Start';
     font-size: 0.7em;
     height: 40px;
-    background-color: rgb(164, 206, 255);
+    /* background-color: rgb(164, 206, 255); */
+    background-color: #d6d6d6;
 }
 
-#place-carrier {
+#place-carrier, #computer-carrier {
     width: 200px;
 }
 
-#place-battleship {
+#place-battleship, #computer-battleship {
     width: 160px;
 }
 
-#place-destroyer, #place-submarine {
+#place-destroyer, #place-submarine, #computer-destroyer, #computer-submarine {
     width: 120px;
 }
 
-#place-patrol-boat {
+#place-patrol-boat, #computer-patrol-boat {
     width: 80px;
 }
 
-.ship-selected {
+/* .ship-selected {
     background-color: rgb(95, 170, 255);
     box-shadow: 0 0 5px rgb(61, 61, 61) inset;
-}
+} */
 
 .placed {
-    background-color: rgb(69, 228, 69);
+    background-color: rgb(164, 206, 255);
 }
 
 .gameboard-one-container {
@@ -118,6 +119,15 @@ body {
 
 .gameboard-two-container {
     grid-area: 3 / 3 / 4 / 4;
+}
+
+.computer-ships {
+    grid-area: 3 / 4 / 4 / 5;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: 20px;
+    padding-top: 70px;
 }
 
 .gameboard-one-container, .gameboard-two-container {
@@ -181,4 +191,8 @@ td {
 
 .sunk {
     background-color: rgb(36, 146, 26);
+}
+
+.token-red {
+    background-color: #ffa5a5;
 }

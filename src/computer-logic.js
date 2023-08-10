@@ -1,14 +1,23 @@
-import { randomNumber, randomCoords, attackSquare } from "./app.js";
+import {
+  randomNumber,
+  randomCoords,
+  attackSquare,
+  checkAllSunk,
+} from "./app.js";
 import {
   computerBoardDisplay,
   playerBoardDisplay,
+  placeShips,
   checkShipOverlap,
   getSquareFromDOM,
   markSquareAsMissed,
   markSquareAsHit,
   markShipAsSunk,
+  turnShipTokenRed,
   setAdjacentSquares,
   addShipPlacedClass,
+  computerShips,
+  showShipsPlaced,
   computerMessage,
   displayHitMessage,
   displayMissMessage,
@@ -35,6 +44,7 @@ export function placeComputerShips() {
     addShipPlacedClass(squaresToOccupy, computerBoardDisplay);
     setAdjacentSquares(squaresToOccupy, computerBoardDisplay, computer, ship);
   }
+  showShipsPlaced(computerShips);
 }
 
 export function attackPlayer() {
@@ -53,6 +63,7 @@ export function attackPlayer() {
         playerBoardDisplay,
         squareToAttack.isOccupied.placedCoords
       );
+      turnShipTokenRed(squareToAttack.isOccupied, placeShips);
       if (checkAllSunk(player.ships)) {
         declareWinner(computer);
         return;
