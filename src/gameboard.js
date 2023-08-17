@@ -86,6 +86,7 @@ export function initializeGameboard() {
       }
       currentSquare.attacked = true;
     },
+    lastSquareHit: "",
     hasShips: function () {
       return this.squares.some((square) => square.isOccupied !== false);
     },

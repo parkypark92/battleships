@@ -25,6 +25,9 @@ import {
 } from "./UI.js";
 import { computer, player } from "./game.js";
 
+let boardSquare;
+let squareToAttack;
+
 export function placeComputerShips() {
   for (let ship of computer.ships) {
     setRandomShipDirection(ship);
@@ -48,16 +51,24 @@ export function placeComputerShips() {
 }
 
 export function attackPlayer() {
-  let boardSquare = getSquareFromDOM(playerBoardDisplay, randomCoords());
-  while (boardSquare.classList.contains("attacked")) {
+  if (
+    player.board.lastSquareHit === "" ||
+    player.board.lastSquareHit.isOccupied.isSunk()
+  ) {
     boardSquare = getSquareFromDOM(playerBoardDisplay, randomCoords());
+    while (boardSquare.classList.contains("attacked")) {
+      boardSquare = getSquareFromDOM(playerBoardDisplay, randomCoords());
+    }
+    squareToAttack = player.board.getSquare(
+      boardSquare.getAttribute("data-coord")
+    );
+  } else {
+    aimForAdjacentSquare(player.board.lastSquareHit);
   }
-  const squareToAttack = player.board.getSquare(
-    boardSquare.getAttribute("data-coord")
-  );
   attackSquare(player, squareToAttack.coords);
   if (squareToAttack.isOccupied) {
     markSquareAsHit(boardSquare);
+    player.board.lastSquareHit = squareToAttack;
     if (squareToAttack.isOccupied.isSunk()) {
       markShipAsSunk(
         playerBoardDisplay,
@@ -78,6 +89,84 @@ export function attackPlayer() {
   }
 }
 
+function aimForAdjacentSquare(lastHit) {
+  const adjacent = getLeftRightUpDownAdjacentSquares(lastHit);
+  const boardSquares = getDOMSquares(adjacent);
+  let adjacentHit = boardSquares.filter((square) =>
+    square.classList.contains("square-hit")
+  );
+  if (adjacentHit.length == 2) {
+    adjacentHit = adjacentHit.filter(
+      (square) => !square.classList.contains("checked")
+    );
+    console.log(adjacentHit);
+  }
+  if (adjacentHit.length == 1) {
+    const adjSquare = calculateNextMove(lastHit, adjacentHit[0]);
+    if (boardSquare === null || boardSquare.classList.contains("attacked")) {
+      lastHit = adjSquare;
+      aimForAdjacentSquare(lastHit);
+    }
+  } else {
+    const freeSquares = boardSquares.filter(
+      (square) => !square.classList.contains("attacked")
+    );
+    boardSquare = freeSquares[0];
+  }
+  boardSquare.classList.add("checked");
+  squareToAttack = player.board.getSquare(
+    boardSquare.getAttribute("data-coord")
+  );
+}
+
+function getLeftRightUpDownAdjacentSquares(lastHit) {
+  let adjacentSquares = [];
+  let xCoord = lastHit.col;
+  let yCoord = lastHit.row;
+  adjacentSquares.push(player.board.getSquare(`${xCoord}, ${yCoord - 1}`));
+  adjacentSquares.push(player.board.getSquare(`${xCoord + 1}, ${yCoord}`));
+  adjacentSquares.push(player.board.getSquare(`${xCoord}, ${yCoord + 1}`));
+  adjacentSquares.push(player.board.getSquare(`${xCoord - 1}, ${yCoord}`));
+  const filtered = adjacentSquares.filter((square) => square !== undefined);
+  return filtered;
+}
+
+function getDOMSquares(arrayOfSquares) {
+  let boardSquares = [];
+  for (let square of arrayOfSquares) {
+    boardSquares.push(getSquareFromDOM(playerBoardDisplay, square.coords));
+  }
+  return boardSquares;
+}
+
+function calculateNextMove(lastHit, adjacentHit) {
+  const adjSquare = player.board.getSquare(
+    adjacentHit.getAttribute("data-coord")
+  );
+  if (lastHit.col < adjSquare.col) {
+    boardSquare = getSquareFromDOM(
+      playerBoardDisplay,
+      `${lastHit.col - 1}, ${lastHit.row}`
+    );
+  } else if (lastHit.col > adjSquare.col) {
+    boardSquare = getSquareFromDOM(
+      playerBoardDisplay,
+      `${lastHit.col + 1}, ${lastHit.row}`
+    );
+  } else if (lastHit.row < adjSquare.row) {
+    boardSquare = getSquareFromDOM(
+      playerBoardDisplay,
+      `${lastHit.col}, ${lastHit.row - 1}`
+    );
+  } else if (lastHit.row > adjSquare.row) {
+    boardSquare = getSquareFromDOM(
+      playerBoardDisplay,
+      `${lastHit.col}, ${lastHit.row + 1}`
+    );
+  }
+  return adjSquare;
+}
+
 function setRandomShipDirection(ship) {
   const number = randomNumber();
   if (number >= 0 && number <= 4) {
@@ -85,4 +174,12 @@ function setRandomShipDirection(ship) {
   } else if (number >= 5 && number <= 9) {
     ship.direction = "horizontal";
   }
+}
+
+export function hardCodeAttack() {
+  const square = player.board.getSquare("0, 4");
+  attackSquare(player, square.coords);
+  const boardSquare = getSquareFromDOM(playerBoardDisplay, square.coords);
+  markSquareAsHit(boardSquare);
+  player.board.lastSquareHit = square;
 }

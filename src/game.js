@@ -5,7 +5,7 @@ import {
   clearMessages,
   typewriter,
 } from "./UI.js";
-import { placeComputerShips } from "./computer-logic.js";
+import { placeComputerShips, hardCodeAttack } from "./computer-logic.js";
 import { computerTurn, decideFirstTurn, playerTurn } from "./app.js";
 
 export let player = Player("Player");
@@ -14,6 +14,7 @@ export let winner = false;
 
 export function startGame() {
   placeComputerShips();
+  // hardCodeAttack();
   const firstTurn = decideFirstTurn();
   if (firstTurn === "player") {
     clearMessages();

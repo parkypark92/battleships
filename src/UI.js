@@ -297,6 +297,7 @@ export function markSquareAsMissed(square) {
 export function markSquareAsHit(square) {
   const hit = document.createElement("div");
   square.classList.add("attacked");
+  square.classList.add("square-hit");
   hit.classList.add("hit");
   square.appendChild(hit);
 }
@@ -313,7 +314,6 @@ export function turnShipTokenRed(sunkenShip, playersShips) {
   for (let ship of playersShips) {
     if (ship.getAttribute("data-ship") === sunkenShip.id) {
       shipToken = ship;
-      console.log(shipToken);
     }
   }
   shipToken.classList.add("token-red");
