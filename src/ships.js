@@ -19,5 +19,6 @@ export function Ship(name, id, length) {
       return this.hits === this.length ? true : false;
     },
     placedCoords: [],
+    adjacentSquares: [],
   };
 }

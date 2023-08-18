@@ -51,6 +51,7 @@ export function initializeGameboard() {
             !square.isAdjacentTo.some((e) => e.name === ship.name)
           ) {
             square.isAdjacentTo.push(ship);
+            ship.adjacentSquares.push(square);
             finalAdjacentSquares.push(square);
           }
         }
@@ -90,7 +91,10 @@ export function initializeGameboard() {
     hasShips: function () {
       return this.squares.some((square) => square.isOccupied !== false);
     },
-    checkForWin: function () {},
+    winner: false,
+    makeWinner: function () {
+      this.winner = true;
+    },
   };
 }
 

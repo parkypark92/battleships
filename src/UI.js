@@ -32,7 +32,6 @@ let currentShip = document.querySelector(`[data-ship="${selectedShip}"]`);
 export const computerShips = document.querySelectorAll(
   ".computer-ships button"
 );
-console.log(computerShips);
 
 export function getSquareFromDOM(board, coords) {
   return board.querySelector(`[data-coord="${coords}"]`);
@@ -246,7 +245,8 @@ function addComputerBoardEvents() {
       }
       currentSquare.classList.remove("show-hover");
       makeUnclickable(computerBoardDisplay);
-      if (winner === true) return;
+      if (computer.board.winner === true || player.board.winner === true)
+        return;
       setTimeout(computerTurn, 2500);
     });
   }

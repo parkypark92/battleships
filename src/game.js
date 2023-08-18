@@ -14,7 +14,23 @@ export let winner = false;
 
 export function startGame() {
   placeComputerShips();
-  // hardCodeAttack();
+  hardCodeAttack("0, 3");
+  hardCodeAttack("0, 4");
+  hardCodeAttack("0, 5");
+  hardCodeAttack("0, 6");
+  hardCodeAttack("0, 7");
+  hardCodeAttack("2, 3");
+  hardCodeAttack("2, 4");
+  hardCodeAttack("2, 5");
+  hardCodeAttack("2, 6");
+  hardCodeAttack("4, 3");
+  hardCodeAttack("4, 4");
+  hardCodeAttack("4, 5");
+  hardCodeAttack("6, 3");
+  hardCodeAttack("6, 4");
+  hardCodeAttack("6, 5");
+  hardCodeAttack("8, 3");
+  console.log(window);
   const firstTurn = decideFirstTurn();
   if (firstTurn === "player") {
     clearMessages();
