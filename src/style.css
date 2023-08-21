@@ -196,3 +196,17 @@ td {
 .token-red {
     background-color: #ffa5a5;
 }
+
+.play-again {
+    grid-area: 4 / 1 / 5 / 5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#play-again-button {
+    height: 50px;
+    width: 200px;
+    font-family: 'Press Start';
+    background-color:  rgb(189, 84, 84);
+}

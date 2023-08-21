@@ -6,6 +6,7 @@ import {
   computerMessage,
   typewriter,
   clearMessages,
+  playAgain,
 } from "./UI.js";
 import { attackPlayer, getDOMSquares } from "./computer-logic.js";
 import { computer, player, winner } from "./game.js";
@@ -66,6 +67,6 @@ export function declareWinner(winningPlayer) {
     computerMessage.textContent = `${winningPlayer.name} Wins!`;
   }
   winningPlayer.board.makeWinner();
-  console.log(winningPlayer.board);
   makeUnclickable(computerBoardDisplay);
+  playAgain.classList.remove("hidden");
 }

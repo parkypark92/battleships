@@ -32,6 +32,8 @@ let currentShip = document.querySelector(`[data-ship="${selectedShip}"]`);
 export const computerShips = document.querySelectorAll(
   ".computer-ships button"
 );
+export const playAgain = document.getElementById("play-again-button");
+playAgain.classList.add("hidden");
 
 export function getSquareFromDOM(board, coords) {
   return board.querySelector(`[data-coord="${coords}"]`);
@@ -45,6 +47,7 @@ placeDestroyer.addEventListener("click", selectShip);
 placeSubmarine.addEventListener("click", selectShip);
 placePatrolBoat.addEventListener("click", selectShip);
 directionButton.addEventListener("click", changeShipDirection);
+playAgain.addEventListener("click", () => window.location.reload());
 
 //FUNCTIONS FOR BUTTON EVENTS
 function selectShip() {
