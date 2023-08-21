@@ -9,15 +9,7 @@ import {
   playAgain,
 } from "./UI.js";
 import { attackPlayer, getDOMSquares } from "./computer-logic.js";
-import { computer, player, winner } from "./game.js";
-
-export function randomNumber(num) {
-  return Math.floor(Math.random() * num);
-}
-
-export function randomCoords() {
-  return `${randomNumber(10)}, ${randomNumber(10)}`;
-}
+import { computer, player } from "./game.js";
 
 export function decideFirstTurn() {
   const number = randomNumber(10);
@@ -69,4 +61,12 @@ export function declareWinner(winningPlayer) {
   winningPlayer.board.makeWinner();
   makeUnclickable(computerBoardDisplay);
   playAgain.classList.remove("hidden");
+}
+
+export function randomNumber(num) {
+  return Math.floor(Math.random() * num);
+}
+
+export function randomCoords() {
+  return `${randomNumber(10)}, ${randomNumber(10)}`;
 }

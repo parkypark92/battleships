@@ -1,5 +1,5 @@
 import { player, computer } from "./game.js";
-import { startGame, winner } from "./game.js";
+import { startGame } from "./game.js";
 import {
   attackSquare,
   computerTurn,
@@ -7,18 +7,28 @@ import {
   declareWinner,
 } from "./app.js";
 
-//DOM
+//DOM ASSIGNMENTS
 export const playerBoardDisplay = document.getElementById("gameboard-one");
 export const computerBoardDisplay = document.getElementById("gameboard-two");
 export const playerMessage = document.querySelector(".player-messages");
 export const computerMessage = document.querySelector(".computer-messages");
+export const computerShips = document.querySelectorAll(
+  ".computer-ships button"
+);
+export const playAgain = document.getElementById("play-again-button");
 const shipType = document.querySelector(".ship-type");
 const placeCarrier = document.getElementById("place-carrier");
-placeCarrier.classList.add("ship-selected");
 const placeBattleship = document.getElementById("place-battleship");
 const placeDestroyer = document.getElementById("place-destroyer");
 const placeSubmarine = document.getElementById("place-submarine");
 const placePatrolBoat = document.getElementById("place-patrol-boat");
+const directionButton = document.querySelector(".ship-direction-button");
+
+//SETUP VARIABLES / CLASSES
+placeCarrier.classList.add("ship-selected");
+playAgain.classList.add("hidden");
+let selectedShip = "carrier";
+let currentShip = document.querySelector(`[data-ship="${selectedShip}"]`);
 export const placeShips = [
   placeCarrier,
   placeBattleship,
@@ -26,51 +36,12 @@ export const placeShips = [
   placeSubmarine,
   placePatrolBoat,
 ];
-const directionButton = document.querySelector(".ship-direction-button");
-let selectedShip = "carrier";
-let currentShip = document.querySelector(`[data-ship="${selectedShip}"]`);
-export const computerShips = document.querySelectorAll(
-  ".computer-ships button"
-);
-export const playAgain = document.getElementById("play-again-button");
-playAgain.classList.add("hidden");
-
-export function getSquareFromDOM(board, coords) {
-  return board.querySelector(`[data-coord="${coords}"]`);
-}
 
 //BUTTON EVENTS
-
-placeCarrier.addEventListener("click", selectShip);
-placeBattleship.addEventListener("click", selectShip);
-placeDestroyer.addEventListener("click", selectShip);
-placeSubmarine.addEventListener("click", selectShip);
-placePatrolBoat.addEventListener("click", selectShip);
 directionButton.addEventListener("click", changeShipDirection);
 playAgain.addEventListener("click", () => window.location.reload());
 
 //FUNCTIONS FOR BUTTON EVENTS
-function selectShip() {
-  removeShipSelection();
-  this.classList.add("ship-selected");
-  selectedShip = this.getAttribute("data-ship");
-  currentShip = document.querySelector(`[data-ship="${selectedShip}"]`);
-}
-
-function prepareNextShip() {
-  removeShipSelection();
-  let currentIndex = placeShips.indexOf(currentShip);
-  if (currentIndex < placeShips.length - 1) {
-    currentIndex++;
-  } else {
-    return;
-  }
-  currentShip = placeShips[currentIndex];
-  selectedShip = currentShip.getAttribute("data-ship");
-  currentShip.classList.add("ship-selected");
-  shipType.textContent = `Type: ${currentShip.textContent}`;
-}
-
 function removeShipSelection() {
   for (let ship of placeShips) {
     ship.classList.remove("ship-selected");
@@ -88,12 +59,6 @@ function changeShipDirection() {
   }
 }
 
-function hideButtons(...args) {
-  for (let button of args) {
-    button.classList.add("hidden");
-  }
-}
-
 function addShowHoverClass(boardSquares, boardDisplay) {
   for (let square of boardSquares) {
     let currentSquare = boardDisplay.querySelector(
@@ -103,6 +68,7 @@ function addShowHoverClass(boardSquares, boardDisplay) {
   }
 }
 
+//PLAYER BOARD EVENTS
 function addPlayerBoardEvents() {
   for (let square of player.board.squares) {
     let currentSquare = playerBoardDisplay.querySelector(
@@ -216,7 +182,37 @@ export function checkShipOverlap(squares, board) {
   );
 }
 
-//EVENTS FOR COMPUTER BOARD
+function prepareNextShip() {
+  removeShipSelection();
+  let currentIndex = placeShips.indexOf(currentShip);
+  if (currentIndex < placeShips.length - 1) {
+    currentIndex++;
+  } else {
+    return;
+  }
+  currentShip = placeShips[currentIndex];
+  selectedShip = currentShip.getAttribute("data-ship");
+  currentShip.classList.add("ship-selected");
+  shipType.textContent = `Type: ${currentShip.textContent}`;
+}
+
+function checkGameReady() {
+  if (placeShips.every((ship) => ship.classList.contains("placed"))) {
+    removeShipSelection();
+    makeUnclickable(
+      placeCarrier,
+      placeBattleship,
+      placeDestroyer,
+      placeSubmarine,
+      placePatrolBoat
+    );
+    hideButtons(directionButton);
+    addShowHoverClass(computer.board.squares, computerBoardDisplay);
+    startGame();
+  }
+}
+
+//COMPUTER BOARD EVENTS
 function addComputerBoardEvents() {
   for (let square of computer.board.squares) {
     let currentSquare = computerBoardDisplay.querySelector(
@@ -255,41 +251,11 @@ function addComputerBoardEvents() {
   }
 }
 
-export function makeClickable(...elements) {
-  for (let element of elements) {
-    element.classList.remove("unclickable");
-  }
-}
-
-export function makeUnclickable(...elements) {
-  for (let element of elements) {
-    element.classList.add("unclickable");
-  }
-}
-
-export function showShipsPlaced(ships) {
-  for (let ship of ships) {
-    ship.classList.add("placed");
-  }
-}
-
-function checkGameReady() {
-  if (placeShips.every((ship) => ship.classList.contains("placed"))) {
-    removeShipSelection();
-    makeUnclickable(
-      placeCarrier,
-      placeBattleship,
-      placeDestroyer,
-      placeSubmarine,
-      placePatrolBoat
-    );
-    hideButtons(directionButton);
-    addShowHoverClass(computer.board.squares, computerBoardDisplay);
-    startGame();
-  }
-}
-
 //OTHER FUNCTIONS
+export function getSquareFromDOM(board, coords) {
+  return board.querySelector(`[data-coord="${coords}"]`);
+}
+
 export function markSquareAsMissed(square) {
   const miss = document.createElement("div");
   square.classList.add("attacked");
@@ -351,6 +317,30 @@ export function typewriter(messageBox, message, i = 0) {
     messageBox.textContent += message.charAt(i);
     i++;
     setTimeout(() => typewriter(messageBox, message, i), 50);
+  }
+}
+
+function hideButtons(...args) {
+  for (let button of args) {
+    button.classList.add("hidden");
+  }
+}
+
+export function makeClickable(...elements) {
+  for (let element of elements) {
+    element.classList.remove("unclickable");
+  }
+}
+
+export function makeUnclickable(...elements) {
+  for (let element of elements) {
+    element.classList.add("unclickable");
+  }
+}
+
+export function showShipsPlaced(ships) {
+  for (let ship of ships) {
+    ship.classList.add("placed");
   }
 }
 
