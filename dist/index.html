@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="./main.js" type="module" defer></script>
+    <title>Battleships</title>
+</head>
+<body>
+    <div class="main-wrapper">
+        <h1 class="battleship-heading">BATTLESHIPS</h1>
+        <div class="player-messages">
+            <div class="ship-placement-message">
+                <p class="message">Place your ships...</p>
+                <p class="ship-type">Type: Carrier</p>
+                <div class="ship-direction">
+                    <p>Direction:</p>
+                    <button type="button" class="ship-direction-button">Vertical</button>
+                </div>
+            </div>
+        </div>
+        <div class="computer-messages">
+        </div>
+        <div class="player-ships">
+            <button type="button" class="place-ship" id="place-carrier" data-ship="carrier">Carrier</button>
+            <button type="button" class="place-ship" id="place-battleship" data-ship="battleship">Battleship</button>
+            <button type="button" class="place-ship" id="place-destroyer" data-ship="destroyer">Destroyer</button>
+            <button type="button" class="place-ship" id="place-submarine" data-ship="submarine">Submarine</button>
+            <button type="button" class="place-ship" id="place-patrol-boat" data-ship="patrolBoat">Patrol Boat</button>
+        </div>
+            <div class="gameboard-one-container">
+                <table id="gameboard-one" class="gameboard" cellspacing="0">
+                    <tr class="row0"></tr>
+                    <tr class="row1"></tr>
+                    <tr class="row2"></tr>
+                    <tr class="row3"></tr>
+                    <tr class="row4"></tr>
+                    <tr class="row5"></tr>
+                    <tr class="row6"></tr>
+                    <tr class="row7"></tr>
+                    <tr class="row8"></tr>
+                    <tr class="row9"></tr>
+                </table>
+            </div>
+            <div class="gameboard-two-container">
+                <table id="gameboard-two" class="gameboard" cellspacing="0">
+                    <tr class="row0"></tr>
+                    <tr class="row1"></tr>
+                    <tr class="row2"></tr>
+                    <tr class="row3"></tr>
+                    <tr class="row4"></tr>
+                    <tr class="row5"></tr>
+                    <tr class="row6"></tr>
+                    <tr class="row7"></tr>
+                    <tr class="row8"></tr>
+                    <tr class="row9"></tr>
+                </table>
+            </div>
+            <div class="computer-ships">
+                <button type="button" class="place-ship" id="computer-carrier"  data-ship="carrier">Carrier</button>
+                <button type="button" class="place-ship" id="computer-battleship" data-ship="battleship">Battleship</button>
+                <button type="button" class="place-ship" id="computer-destroyer" data-ship="destroyer">Destroyer</button>
+                <button type="button" class="place-ship" id="computer-submarine" data-ship="submarine">Submarine</button>
+                <button type="button" class="place-ship" id="computer-patrol-boat" data-ship="patrolBoat">Patrol Boat</button>
+            </div>
+            <div class="play-again">
+                <button id="play-again-button">Play Again</button>
+            </div>
+    </div>
+</body>
+</html>
